@@ -31,19 +31,23 @@ public class RolesBizImpl implements IRolesBiz {
 
 	@Override
 	public Integer add(String rname, String mark) {
-		// TODO Auto-generated method stub
-		return null;
+		IRolesDao rolesDao = new RolesDaoImpl();
+		return rolesDao.add(rname, mark);
 	}
 
 	@Override
 	public Integer del(String rid) {
-		// TODO Auto-generated method stub
-		return null;
+		if(rid == null || "".equals(rid) ){
+			return 0;
+		}
+		IRolesDao rolesDao = new RolesDaoImpl();
+		return rolesDao.del(rid);
 	}
 
 	@Override
 	public Integer update(String rname, String mark, String rid) {
-		// TODO Auto-generated method stub
+		IRolesDao rolesDao = new RolesDaoImpl();
+		rolesDao.update(rname, mark, rid);
 		return null;
 	}
 

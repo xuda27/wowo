@@ -14,10 +14,10 @@ public class InitServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
 	@Override
-	public void init(ServletConfig config) throws ServletException {
+	public void init() throws ServletException {
 		String path = "../path";
-		if( config.getInitParameter("uploadPath") != null ){
-			path = config.getInitParameter("uploadPath");
+		if( this.getInitParameter("uploadPath") != null ){
+			path = this.getInitParameter("uploadPath");
 		}
 		
 		File file = new File( this.getServletContext().getRealPath(path) );

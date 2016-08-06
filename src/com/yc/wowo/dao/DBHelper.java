@@ -418,4 +418,71 @@ public class DBHelper {
 		}
 		return list;
 	}
+	
+	/**
+	 * 
+	 * @param sql
+	 * @param params 参数列表
+	 * @param c 要注入的对象
+	 * @return
+	 */
+	public <T>T findByOne(String sql,List<Object>params,Class<T> c){
+		Connection con= getConnection();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		T t=null;
+		try {
+			con=this.getConnection();
+			pstmt=con.prepareStatement(sql);
+			this.doParams(pstmt, params);
+			rs=pstmt.executeQuery();
+			//将结果集中的每一条记录注入到一个对象中
+			//1、获取每个列的名称，并将其存放到一个数组中
+			List<String> cols=this.getColumn(rs);//cid
+			//2、获取给定类中的所有setter方法
+			Method[] methods=c.getMethods();//setcid
+
+			String cname=null;
+			String mname=null;
+			String ctypeName=null;
+			if(rs.next()){
+				t=c.newInstance();//创建反射类的实例化对象
+				for(int i=0,len=cols.size();i<len;i++){
+					cname=cols.get(i);
+					//从类的方法中找到对应的setter方法
+					if(methods!=null && methods.length>0){
+						for(Method method:methods){
+							mname=method.getName();//获取当前循环的这个方法的方法名
+
+							//比较当前的方法名是否和处理后的列名相同
+							if(("set"+cname).equalsIgnoreCase(mname) && rs.getObject(cname)!=null){
+								//System.out.println(cname+" "+mname);
+								//如果找到对应的setter方法，则激活这个方法，将这个列的值注入进去
+								ctypeName=rs.getObject(cname).getClass().getSimpleName();
+
+								if("String".equals(ctypeName)){
+									method.invoke(t, rs.getString(cname));
+								}else if("BigDecimal".equals(ctypeName)){
+									try {
+										method.invoke(t, rs.getInt(cname));
+									} catch (Exception e) {
+										method.invoke(t, rs.getDouble(cname));
+									}
+								}else{
+									method.invoke(t, rs.getString(cname));
+								}
+								break;
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			LogUtil.log.error(e.toString());
+			e.printStackTrace();
+		}finally {
+			this.closeAll(null, pstmt, con);
+		}
+		return t;
+	}
 }

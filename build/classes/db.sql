@@ -6,6 +6,7 @@ create table roles(
        status number(2) --状态
 );
 create sequence seq_roles_rid start with 1001;
+insert into roles values(1,'CEO','首席执行官','1');
 
 --后台管理员信息表
 create table adminInfo(
@@ -21,6 +22,11 @@ create table adminInfo(
        mark varchar2(200)--说明
 );
 create sequence seq_adminInfo_aid start with 1001;
+--赋予scott用户创建视图的权限
+grant create view to scott;
+
+--创建一个管理员视图
+create view adminInfos as select a.*, rname from Admininfo a, roles r where a.rid = r.rid;
 
 --前台注册用户表
 create table userInfo(

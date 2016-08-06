@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author xxx
  *
  */
-public class CharacterEncoding implements Filter {
+public class CharacterEncodingFilter implements Filter {
 	private String encoding = "utf-8";
 	
 	@Override

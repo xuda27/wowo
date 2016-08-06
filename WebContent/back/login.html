@@ -28,6 +28,17 @@
 			$(".container").css("position","fixed").css("top",($(window).height()-$(".container").height())/2)
 			.css("left",($(window).width()-$(".container").width())/2);
 		});
+		
+		$.post("../rolesServlet", {op:"findAllRoles"}, function(data) {
+			var str = "";
+			var str1 = "";
+			$.each(data, function(index, item){
+				str += "<li><a id='"+item.id+"' href=\"javascript:login('"+item.rid+"','loginrole')\">"+item.rname+"</a></li>";
+				str1 += "<li><a id='"+item.id+"' href=\"javascript:login('"+item.rid+"','role')\">"+item.rname+"</a></li>";
+			});
+			$("#registerRoles").html("").append( $(str1) );
+			$("#loginRoles").html("").append( $(str) );
+		},"json");
 			
 	});
 	
@@ -43,6 +54,7 @@
 	function backlogin(){
 		$(".register-page").removeClass("slidePageInFromLeft").addClass("slidePageBackLeft");
 	}
+	
 	
     
 </script>
@@ -60,12 +72,6 @@
                                         <div class="input-group">
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">角&nbsp;&nbsp;色<span class="caret"></span></button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a id="role1" href="javascript:login('role1','loginrole')">董事</a></li>
-                                                    <li><a id="role2" href="javascript:login('role2','loginrole')">总经理</a></li>
-                                                    <li><a id="role3" href="javascript:login('role3','loginrole')">总监</a></li>
-                                                    <li><a id="role4" href="javascript:login('role4','loginrole')">部门经理</a></li>
-                                                </ul>
                                             </div>
                                             <input id="loginrole" type="text" class="form-control" disabled="disabled" required placeholder="请选择角色"/>    
                                             <label class="input-group-addon"><a href="callbackpassword.html" class="errorinfo">忘记密码...</a></label>
@@ -84,7 +90,7 @@
                                         <div class="input-group">
                                             <label for="vcode" class="input-group-addon">验证码</label>
                                             <input type="text" class="form-control" name="vcode" id="vcode" required placeholder="请输入右边的验证码"/>
-                                            <label class="input-group-btn">&nbsp;&nbsp;123445454&nbsp;&nbsp;</label>
+                                            <label class="input-group-btn"><img alt="" src="valiCodeImg.jsp" onclick="this.src='valiCodeImg.jsp?d='+new Date()"></label>
                                         </div>
                                         <br/>
                                         <div class="input-group">
@@ -112,12 +118,7 @@
                         <div class="input-group">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">角&nbsp;&nbsp;色<span class="caret"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li><a id="role1" href="javascript:login('role1','role')">学工处</a></li>
-                                    <li><a id="role2" href="javascript:login('role2','role')">保卫处</a></li>
-                                    <li><a id="role3" href="javascript:login('role3','role')">书记</a></li>
-                                    <li><a id="role4" href="javascript:login('role4','role')">辅导员</a></li>
-                                    <li><a id="role5" href="javascript:login('role5','role')">超级管理员</a></li>
+                                <ul class="dropdown-menu" id="registerRoles">
                                 </ul>
                             </div>
                             <input id="role" type="text" class="form-control" disabled="disabled" required placeholder="请选择角色"/>                            <label class="input-group-addon"><a href="javascript:backlogin()" class="errorinfo">我已有账号...</a></label>
