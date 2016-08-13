@@ -11,7 +11,7 @@ public class Roles implements Serializable {
 	private Integer rid; //角色编号
 	private String rname;//角色名称
 	private String mark; //角色描述
-	private String status; //状态
+	private Integer status; //状态
 	
 	@Override
 	public String toString() {
@@ -20,6 +20,9 @@ public class Roles implements Serializable {
 	}
 	
 	public Integer getRid() {
+		return rid;
+	}
+	public Integer getRids() {
 		return rid;
 	}
 	
@@ -42,10 +45,19 @@ public class Roles implements Serializable {
 	public void setMark(String mark) {
 		this.mark = mark;
 	}
-	public String getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
-	public void setStatus(String status) {
+	
+	public String getStatusStr() {
+		if(status == 1){
+			return "正常";
+		}else{
+			return "已禁用";
+		}
+	}
+
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	
@@ -92,7 +104,7 @@ public class Roles implements Serializable {
 		return true;
 	}
 	
-	public Roles(Integer rid, String rname, String mark, String status) {
+	public Roles(Integer rid, String rname, String mark, Integer status) {
 		super();
 		this.rid = rid;
 		this.rname = rname;

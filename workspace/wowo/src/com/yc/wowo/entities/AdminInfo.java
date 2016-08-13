@@ -66,11 +66,9 @@ public class AdminInfo implements Serializable {
 	}
 
 	public String getPhoto() {
-		if(photo == null || "".equals(photo)){
-			return "images/zanwu.jpg";
-		}else{
-			return photo;
-		}
+
+		return photo;
+	
 	}
 
 	public void setPhoto(String photo) {
@@ -92,7 +90,21 @@ public class AdminInfo implements Serializable {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-
+	
+	public String getStatusStr(){
+		if(status == 0){
+			return "未审核";
+		}else if(status == 1){
+			return "未通过审核";
+		}else if(status == 2){
+			return "已通过审核";
+		}else if(status == 3){
+			return "冻结";
+		}else{
+			return "错误";
+		}
+	}
+	
 	public String getMark() {
 		return mark;
 	}

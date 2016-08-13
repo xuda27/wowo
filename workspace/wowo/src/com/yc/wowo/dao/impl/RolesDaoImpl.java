@@ -12,7 +12,7 @@ public class RolesDaoImpl implements IRolesDao {
 	@Override
 	public List<Roles> find() {
 		DBHelper  db =new DBHelper();
-		String sql = "select rid, rname, mark from roles where status = 1 order by rid asc";
+		String sql = "select rid, rname, mark,status from roles where status = 1 order by rid asc";
 		return db.find(sql, null, Roles.class);
 	}
 
@@ -20,8 +20,8 @@ public class RolesDaoImpl implements IRolesDao {
 	public List<Roles> find(Integer pageNo, Integer pageSize) {
 		DBHelper db = new DBHelper();
 		List<Object> params = new ArrayList<Object>();
-		//TODO:
-		String sql = "";
+		String sql = "select * from(select a.*,rownum as rn from("+
+		"select rid,rname,mark,status from roles where status = 1 order by rid asc) a where rownum<=?) where rn>?";
 		params.add(pageNo*pageSize);
 		params.add((pageNo-1)*pageSize);
 		return db.find(sql, params, Roles.class);
@@ -42,7 +42,6 @@ public class RolesDaoImpl implements IRolesDao {
 	public Integer del(String rid) {
 		DBHelper db = new DBHelper();
 		List<Object> params = new ArrayList<Object>();
-		params.add(rid);
 		String sql = null;
 		if(rid != null && rid.contains(",") && !rid.contains(" or")){
 			sql = "delete from roles where rid in(" + rid + ")";

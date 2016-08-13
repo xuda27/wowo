@@ -44,7 +44,7 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 			params.add(pageNo*pageSize);
 			params.add((pageNo-1)*pageSize);
 			sql="select * from(select a.*,rownum rn from("
-					+ "select * from adminInfos order by aid desc )a where rownum<=10)where rn>1";
+					+ "select * from adminInfos order by aid desc )a where rownum<=? ) where rn>?";
 		}
 		return db.find(sql, params,AdminInfo.class);
 	}
@@ -195,6 +195,20 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 			params.add(aid);
 		}
 		return db.doUpdate(sql, params);
+	}
+
+	@Override
+	public int getTotal(Integer rid) {
+		DBHelper db = new DBHelper();
+		String sql = null;
+		List<Object> params = new ArrayList<Object>();
+		if(rid == null){
+			sql = "select count(aid) from adminInfo";
+		}else{
+			sql = "select count(aid) from adminInfo where rid = ?";
+			params.add(rid);
+		}
+		return db.findByOne(sql, params);
 	}
 
 }

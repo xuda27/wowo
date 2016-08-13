@@ -116,4 +116,27 @@ public class BasicServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * EasyUi中的分页json
+	 * @param response
+	 * @param list
+	 * @param total
+	 */
+	protected <T> void out(HttpServletResponse response, List<T> list, int total){
+		PrintWriter out = null;
+		JSONArray json = JSONArray.fromObject(list);
+		JSONObject jb = new JSONObject();
+		
+		try {
+			out =  response.getWriter();
+			jb.put("total", total);
+			jb.put("rows", json);
+			out.print(jb);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			out.close();
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package com.yc.wowo.servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,9 +24,25 @@ public class AdminInfoServlet extends BasicServlet{
 			adminLogin(request,response);
 		}else if("getLoginInfo".equals(op)){//返回登录对象
 			getLoginInfo(request,response);
+		}else if("findAdminInfoByPage".equals(op)){
+			findAdminInfoByPage(request, response);
 		}
 	}
 	
+	/**
+	 * 分页查询管理员信息
+	 * @param request
+	 * @param response
+	 */
+	private void findAdminInfoByPage(HttpServletRequest request,
+			HttpServletResponse response) {
+		String pageNo = request.getParameter("page");
+		String pageSize = request.getParameter("rows");
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		List<AdminInfo> list = ab.find(Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+		this.out(response, list, ab.getTotal(null));
+	}
+
 	/**
 	 * 获取当前用户信息
 	 * @param request

@@ -48,8 +48,8 @@ public class RolesBizImpl implements IRolesBiz {
 	@Override
 	public Integer update(String rname, String mark, String rid) {
 		IRolesDao rolesDao = new RolesDaoImpl();
-		rolesDao.update(rname, mark, rid);
-		return null;
+		return rolesDao.update(rname, mark, rid);
 	}
 
+	
 }

@@ -114,4 +114,10 @@ public interface IAdminInfoDao {
 	 */
 	public Integer del(String aid);
 	
+	/**
+	 * 获取总记录
+	 * @param rid 如果为null 获取所有
+	 * @return
+	 */
+	public int getTotal(Integer rid);
 }
