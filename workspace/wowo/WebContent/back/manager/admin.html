@@ -1,3 +1,4 @@
+
 <table class="admin_dataInfo"></table>
 <!-- 工具栏 -->
 <div id="admin_search" style="height:28px">
@@ -47,7 +48,7 @@
 	.admin_right {
 		float:left;
 		border: 1px solid red;
-		width:400px;
+		width:600px;
 		height:500px;
 		margin-right:40px;
 		margin-top:20px;
@@ -56,6 +57,38 @@
 	#admin_search label{
 		margin-left:10px;
 	}
+	
+	/* #camera_errbox {
+		width: 320px;
+		height: auto;
+		border: 1px solid #333333;
+		padding: 10px;
+		color: #fff;
+		text-align: left;
+		margin: 20px auto;
+		font-size: 14px;
+	}
+	
+	#camera_errbox b {
+		padding-bottom: 15px;
+	}
+	
+	.admin_right .borderstyle{
+		-webkit-box-shadow:0 0 5px 3px rgba(255,0,0,.6),0 0 5px 6px rgba(0,182,0,.6),0 0 5px 10px rgba(255,255,0,.6);
+		-moz-box-shadow:0 0 5px 3px rgba(255,0,0,.6),0 0 5px 6px rgba(0,182,0,.6),0 0 5px 10px rgba(255,255,0,.6);
+		-ms-box-shadow:0 0 5px 3px rgba(255,0,0,.6),0 0 5px 6px rgba(0,182,0,.6),0 0 5px 10px rgba(255,255,0,.6);
+		-o-box-shadow:0 0 5px 3px rgba(255,0,0,.6),0 0 5px 6px rgba(0,182,0,.6),0 0 5px 10px rgba(255,255,0,.6);
+		box-shadow:0 0 5px 3px rgba(255,0,0,.6),0 0 5px 6px rgba(0,182,0,.6),0 0 5px 10px rgba(255,255,0,.6);
+	}
+	
+	#navy_video{
+		float:left;
+	}
+
+	#canvas{
+		float:left;
+		margin-left:20px;
+	} */
 </style>
 
 <!-- 添加操作框 -->
@@ -64,7 +97,7 @@
 		<form>
 			<ul>
 				<li>
-					<span>角&nbsp;&nbsp;色:</span>
+					<span>角&nbsp;&nbsp;色：</span>
 					<select name="admin_role" id="admin_role">
 					
 					</select>
@@ -75,23 +108,23 @@
 				</li>
 				<li>
 					<span>密&nbsp;&nbsp;码：</span>
-					<input type="text" name="admin_password" placeholder="请输入您的密码..." required="true">	
+					<input type="text" id="admin_aname" name="admin_password" placeholder="请输入您的密码..." required="true">	
 				</li>
 				<li>
 					<span>注册邮箱：</span>
-					<input type="text" name="admin_email" placeholder="请输入您的邮箱..." required="true">	
+					<input type="text" id="admin_email" name="admin_email" placeholder="请输入您的邮箱..." required="true">	
 				</li>
 				<li>
 					<span>联系方式：</span>
-					<input type="text" name="admin_tel" placeholder="请输入您的联系方式..." required="true">	
+					<input type="text" id="admin_tel" name="admin_tel" placeholder="请输入您的联系方式..." required="true">	
 				</li>
 				<li>
 					<span>图像：</span>
-					<input type="file" name="admin_photo" placeholder="请上传您的头像..." required="true">	
+					<input type="file" id="admin_photo" name="admin_photo" placeholder="请上传您的头像..." required="true">	
 				</li>
 				<li>
 					<span>状态：</span>
-					<input type="text" name="admin_status" placeholder="请选择您的状态..." required="true">	
+					<input type="text" id="admin_status" name="admin_status" placeholder="请填写您的状态..." required="true">	
 				</li>
 				
 			</ul>
@@ -103,12 +136,28 @@
 	</div>  
 	
 	<div class="admin_right">
-		
+			<video id="navy_video" width="320px" height="240px" autoplay class="borderstyle"></video>
+			<input id="snap" type="button" value="拍照"/>
+			<button onclick="convertCanvasToImage()">保存</button>
+			<div id="camera_errbox">
+				<b>请点击“允许”按钮，授权网页访问您的摄像头！</b>
+				<div>若您并未看到任何授权提示，则表示您的浏览器不支持Media Capture或您的机器没有连接摄像头设备。</div>
+			</div>
+			<canvas id="canvas" width="160px" height="120px" class="borderstyle"></canvas>
 	</div>  
 </div>  
 
-
+<script src="../../js/camera.js"></script>
 <script type="text/javascript">
+	$(function() {
+		$.post("../../rolesServlet",{op:"findAllRoles"},function(data){
+			var obj = $("#admin_role");
+			$.each(data,function(index,item){
+				obj.append($("<option value='"+item.rid+"'>"+item.rname+"</option>"));
+			});
+		},"json");
+	});
+
     var datagrid = $(".admin_dataInfo").datagrid({   
         url : '../../adminInfoServlet',
         queryParams : {op : "findAdminInfoByPage"},
