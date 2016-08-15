@@ -48,11 +48,15 @@ public class AdminInfoServlet extends BasicServlet{
 		String tel = request.getParameter("tel");
 		String pic = request.getParameter("photo");
 		
-		PageContext pageContext = JspFactory.getDefaultFactory().getPageContext(this, request, response, null, true, 2048, true);
-		
-		UploadUtil upload = new UploadUtil();
+		if(pic!=null||"".equals(pic)){
+			UploadUtil upload = new UploadUtil();
+			PageContext pageContext = JspFactory.getDefaultFactory().getPageContext(this, request, response, null, true, 2048, true);
+			pic = upload.upload(pageContext, pic, null);
+		}else{
+			pic="";
+		}
 		IAdminInfoBiz adminInfo = new AdminInfoBizImpl();
-		adminInfo.add(aname, password, rid, email, tel, upload.upload(pageContext, pic, null));
+		this.out(response, (int)adminInfo.add(aname, password, rid, email, tel, pic));
 	}
 
 	/**
