@@ -58,7 +58,7 @@
 		margin-left:10px;
 	}
 	
-	/* #camera_errbox {
+	#camera_errbox {
 		width: 320px;
 		height: auto;
 		border: 1px solid #333333;
@@ -67,10 +67,12 @@
 		text-align: left;
 		margin: 20px auto;
 		font-size: 14px;
+		float:left;
 	}
 	
 	#camera_errbox b {
 		padding-bottom: 15px;
+		
 	}
 	
 	.admin_right .borderstyle{
@@ -88,7 +90,7 @@
 	#canvas{
 		float:left;
 		margin-left:20px;
-	} */
+	} 
 </style>
 
 <!-- 添加操作框 -->
@@ -137,13 +139,14 @@
 	
 	<div class="admin_right">
 			<video id="navy_video" width="320px" height="240px" autoplay class="borderstyle"></video>
-			<input id="snap" type="button" value="拍照"/>
-			<button onclick="convertCanvasToImage()">保存</button>
+			<canvas id="canvas" width="160px" height="120px" class="borderstyle"></canvas>
 			<div id="camera_errbox">
 				<b>请点击“允许”按钮，授权网页访问您的摄像头！</b>
 				<div>若您并未看到任何授权提示，则表示您的浏览器不支持Media Capture或您的机器没有连接摄像头设备。</div>
 			</div>
-			<canvas id="canvas" width="160px" height="120px" class="borderstyle"></canvas>
+			
+			<input id="snap" type="button" value="拍照"/>
+			<button onclick="convertCanvasToImage()"> 保存 </button>
 	</div>  
 </div>  
 
@@ -198,7 +201,9 @@
         toolbar: "#admin_search"
     });
 
+    //点击添加管理员信息
     function addAdminInfo() {
+    	init(this);
         $("#admin_addAdminInfo").dialog("open");
     }
 </script>
