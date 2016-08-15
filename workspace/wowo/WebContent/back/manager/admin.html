@@ -110,7 +110,7 @@
 				</li>
 				<li>
 					<span>密&nbsp;&nbsp;码：</span>
-					<input type="text" id="admin_aname" name="admin_password" placeholder="请输入您的密码..." required="true">	
+					<input type="text" id="admin_password" name="admin_password" placeholder="请输入您的密码..." required="true">	
 				</li>
 				<li>
 					<span>注册邮箱：</span>
@@ -133,7 +133,7 @@
 		</form>
 		<br><br>
 		<center>
-			<a href="javascript:addAdminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+			<a href="javascript:add_adminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
 		</center>
 	</div>  
 	
@@ -205,5 +205,33 @@
     function addAdminInfo() {
     	init(this);
         $("#admin_addAdminInfo").dialog("open");
+    }
+    
+    function add_adminInfo() {
+    	var rid = $("#admin_role").val();
+    	var aname = $("#admin_aname").val();
+    	var password = $("#admin_password").val();
+    	var tel = $("#admin_tel").val();
+    	var email = $("#admin_email").val();
+    	var pic = $("#canvas")[0].toDataURL("image/png");
+    	
+    	pic = pic.replace(/^data:image\/(png|jpg);base64,/,"");
+    	
+    	$.post("../../adminInfoServlet",{op:"addAdminInfo",rid:rid, aname:aname, password:password,email:email,tel:tel,photo:pic},function(data){
+    		data = parseInt($.trim(data));
+    		if(data > 0){
+                $.messager.show({title: '成功提示', msg: '角色添加成功', timeout: 2000, showType: 'slide'});
+                $("#admin_aname").val("");
+                $("#admin_password").val("");
+                $("#admin_tel").val("");
+                $("#admin_email").val("");
+                
+                $("#admin_addAdminInfo").dialog("close");//关闭弹出框
+                $("#admin_dataInfo").datagrid("reload");//刷新数据
+    		}else{
+    			$.messager.alert('失败提示', '管理员信息添加失败...','error');
+    		}
+    	});
+    	var status = $("#admin_status").val();
     }
 </script>

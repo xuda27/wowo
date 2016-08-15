@@ -1,6 +1,7 @@
 package com.yc.wowo.utils;
 
 import java.awt.Color;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -12,6 +13,8 @@ import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.jsp.PageContext;
+
+import sun.misc.BASE64Decoder;
 
 import com.jspsmart.upload.File;
 import com.jspsmart.upload.Files;
@@ -94,5 +97,46 @@ public class UploadUtil {
 		
 		
 		return map;
+	}
+	
+	/**
+	 * 
+	 * @param picData 图片数据
+	 * @param path 要保存的文件路径
+	 * @return 图片上传后的路径
+	 */
+	public String upload(PageContext pageContext, String picData,String path){
+		String realpath = null;
+		BASE64Decoder base64 = new BASE64Decoder();
+		FileOutputStream fos = null;
+		try {
+			byte[] buffer = base64.decodeBuffer(picData);  //将图片字符串变成字节数据
+
+			if(path == null){
+				//将字节数组数据写入图片文件
+				String fname = new Date().getTime()+""+new Random().nextInt(1000)+".png";
+				String filePath = pageContext.getServletContext().getRealPath(PATH+"/"+fname);
+				fos = new FileOutputStream(filePath);
+				realpath = PATH+"/"+fname;
+			}else{
+				fos = new FileOutputStream(path);
+				realpath=path;
+			}
+			
+			fos.write(buffer);
+			fos.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			if(fos!=null){
+				try {
+					fos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return realpath;
 	}
 }

@@ -7,11 +7,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspFactory;
+import javax.servlet.jsp.PageContext;
 
 import com.yc.wowo.biz.IAdminInfoBiz;
 import com.yc.wowo.biz.impl.AdminInfoBizImpl;
 import com.yc.wowo.entities.AdminInfo;
 import com.yc.wowo.utils.AttributeData;
+import com.yc.wowo.utils.UploadUtil;
 
 public class AdminInfoServlet extends BasicServlet{
 	private static final long serialVersionUID = -1895688370031862751L;
@@ -26,9 +29,32 @@ public class AdminInfoServlet extends BasicServlet{
 			getLoginInfo(request,response);
 		}else if("findAdminInfoByPage".equals(op)){
 			findAdminInfoByPage(request, response);
+		}else if("addAdminInfo".equals(op)){
+			addAdminInfo(request, response);
 		}
 	}
 	
+	/**
+	 * 添加管理员信息
+	 * @param request
+	 * @param response
+	 */
+	private void addAdminInfo(HttpServletRequest request,
+			HttpServletResponse response) {
+		String rid = request.getParameter("rid");
+		String aname = request.getParameter("aname");
+		String password = request.getParameter("password");
+		String email = request.getParameter("email");
+		String tel = request.getParameter("tel");
+		String pic = request.getParameter("photo");
+		
+		PageContext pageContext = JspFactory.getDefaultFactory().getPageContext(this, request, response, null, true, 2048, true);
+		
+		UploadUtil upload = new UploadUtil();
+		IAdminInfoBiz adminInfo = new AdminInfoBizImpl();
+		adminInfo.add(aname, password, rid, email, tel, upload.upload(pageContext, pic, null));
+	}
+
 	/**
 	 * 分页查询管理员信息
 	 * @param request
