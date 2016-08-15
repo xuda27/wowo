@@ -19,9 +19,92 @@
     &nbsp;&nbsp;<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查找</a>
 </div>
 
-<!-- 添加操作框 -->
-<div id="admin_addAdminInfo" class="easyui-dialog" title="添加管理员信息" data-options="iconCls:'icon-add',resizable:true,modal:true,fit:true,closed:true">  
+<style>
+	.admin_left{
+		float:left;
+		margin:20px;
+	} 
+	
+	.admin_left li{
+		list-style-type:none;
+		margin-top:20px;
+		
+	}
+	
+	.admin_left li span{
+		display:inline-block;
+		width:120px;
+		text-align:right;
+		margin-right:10px;
+	}
+	
+	.admin_left li input, .admin_left li select{
+		width:200px;
+		border:1px soild #green;
+		
+	}
 
+	.admin_right {
+		float:left;
+		border: 1px solid red;
+		width:400px;
+		height:500px;
+		margin-right:40px;
+		margin-top:20px;
+	}
+	
+	#admin_search label{
+		margin-left:10px;
+	}
+</style>
+
+<!-- 添加操作框 -->
+<div id="admin_addAdminInfo" class="easyui-dialog" title="添加管理员信息" data-options="iconCls:'icon-add',resizable:true,modal:true,fit:true,closed:true">
+	<div class="admin_left">
+		<form>
+			<ul>
+				<li>
+					<span>角&nbsp;&nbsp;色:</span>
+					<select name="admin_role" id="admin_role">
+					
+					</select>
+				</li>
+				<li>
+					<span>管理员姓名：</span>
+					<input type="text" name="admin_aname" id="admin_aname" placeholder="请输入您的姓名..." required="true">	
+				</li>
+				<li>
+					<span>密&nbsp;&nbsp;码：</span>
+					<input type="text" name="admin_password" placeholder="请输入您的密码..." required="true">	
+				</li>
+				<li>
+					<span>注册邮箱：</span>
+					<input type="text" name="admin_email" placeholder="请输入您的邮箱..." required="true">	
+				</li>
+				<li>
+					<span>联系方式：</span>
+					<input type="text" name="admin_tel" placeholder="请输入您的联系方式..." required="true">	
+				</li>
+				<li>
+					<span>图像：</span>
+					<input type="file" name="admin_photo" placeholder="请上传您的头像..." required="true">	
+				</li>
+				<li>
+					<span>状态：</span>
+					<input type="text" name="admin_status" placeholder="请选择您的状态..." required="true">	
+				</li>
+				
+			</ul>
+		</form>
+		<br><br>
+		<center>
+			<a href="javascript:addAdminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+		</center>
+	</div>  
+	
+	<div class="admin_right">
+		
+	</div>  
 </div>  
 
 
@@ -67,6 +150,6 @@
     });
 
     function addAdminInfo() {
-        $("#addAdmin_addAdminInfo").dialog("open");
+        $("#admin_addAdminInfo").dialog("open");
     }
 </script>

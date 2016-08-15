@@ -1,6 +1,5 @@
 package com.yc.wowo.entities;
 
-import java.awt.Image;
 import java.io.Serializable;
 
 public class Goods implements Serializable{
