@@ -70,8 +70,8 @@
                handler: function(){ //当用户选择修改时。
                 op = "updateRoles";
                 flag = "修改";
-                var row = datagrid.datagrid('getChecked')[0];//返回所有行的复选框已被选中
-                if (row == undefined) { //说明用户没有选择要修改的数据
+                var rows = datagrid.datagrid('getChecked')[0];//返回所有行的复选框已被选中
+                if (rows == undefined) { //说明用户没有选择要修改的数据
                     $.messager.show({title: '温馨提示', msg: '请选择要修改的数据', timeout: 2000, showType: 'slide'});
                 }else {
                     //判断有木有正在被编辑的行，如果有则先关闭正在被编辑的行
@@ -81,8 +81,8 @@
                         editRow = undefined;
                     }
                     //开启要修改的那一行的编辑
-                    var index = datagrid.datagrid("getRowIndex",row);//先获取要修改的行的索引
-                    datagrid.datagrid("updateRow",{index: index, row: row});//开启更新
+                    var index = datagrid.datagrid("getRowIndex",rows);//先获取要修改的行的索引
+                    datagrid.datagrid("updateRow",{index: index, rows: rows});//开启更新
                     datagrid.datagrid('beginEdit', index);
                     editRow = index; //记录当前被编辑的行号
                  }
@@ -123,8 +123,11 @@
                iconCls: 'icon-save',
                text:"保存",
                handler: function(){//当用户选择保存时
+            	   var rows = datagrid.datagrid("getChanges")[0]; //获取当期正在被编辑的行
+            	   if(rows.rname==null||rows.rname==""||rows.mark==null||rows.mark==""||rows.status==""||rows.status==null){
+                	   $.messager.show({title: '温馨提示', msg: '请输入完整的数据', timeout: 2000, showType: 'slide'});
+                   }
                    datagrid.datagrid("endEdit", editRow);//结束编辑
-                   var rows = datagrid.datagrid("getChanges")[0];//获取当期正在被编辑的行
                    if (rows == undefined) { //说明用户没有修改任何信息
                        datagrid.datagrid("rejectChanges"); //回滚
                        datagrid.datagrid("unselectAll");//取消所有选择页面

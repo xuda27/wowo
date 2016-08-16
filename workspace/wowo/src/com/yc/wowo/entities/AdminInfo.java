@@ -49,11 +49,11 @@ public class AdminInfo implements Serializable {
 		this.rid = rid;
 	}
 
-	public String getPwd() {
+	public String getpwd() {
 		return pwd;
 	}
 
-	public void setPwd(String pwd) {
+	public void setpwd(String pwd) {
 		this.pwd = pwd;
 	}
 
