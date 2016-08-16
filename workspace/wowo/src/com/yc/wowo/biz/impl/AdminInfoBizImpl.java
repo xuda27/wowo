@@ -1,6 +1,7 @@
 package com.yc.wowo.biz.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yc.wowo.biz.IAdminInfoBiz;
 import com.yc.wowo.dao.IAdminInfoDao;
@@ -135,6 +136,13 @@ public class AdminInfoBizImpl implements IAdminInfoBiz{
 	public int getTotal(Integer rid) {
 		IAdminInfoDao adminInfoDao=new AdminInfoDaoImpl();
 		return adminInfoDao.getTotal(rid);
+	}
+
+	@Override
+	public List<AdminInfo> find(Map<String, String> params, Integer pageNo,
+			Integer pageSize) {
+		IAdminInfoDao	adminInfoDao = new AdminInfoDaoImpl();
+		return adminInfoDao.find(params, pageNo, pageSize);
 	}
 
 	

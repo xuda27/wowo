@@ -1,6 +1,7 @@
 package com.yc.wowo.biz;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yc.wowo.entities.AdminInfo;
 
@@ -114,4 +115,6 @@ public interface IAdminInfoBiz {
 	 * @return
 	 */
 	public int getTotal(Integer rid);
+	
+	public List<AdminInfo> find(Map<String,String>params,Integer pageNo,Integer pageSize);
 }

@@ -5,18 +5,18 @@
     <div class="datagrid-btn-separator"></div>
     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" style="float: left">删除</a>
     <div class="datagrid-btn-separator"></div>
-    <label>请选择角色：</label><select name="role">
-        <option value='-1'>--请选择--</option>
+    <label>请选择角色：</label><select name="role" id="admin_select_rid">
+    <option value='-1'>--请选择--</option>
     </select>&nbsp;
-    <label>请输入管理员姓名：</label><input type="text" name="aname">
-    <label>请选择状态：</label><select name="status">
+    <label>请输入管理员姓名：</label><input type="text" name="aname" id="admin_select_aname">
+    <label>请选择状态：</label><select name="status" id="admin_select_status">
         <option value="-1">--请选择--</option>
         <option value="0">未审核</option>
         <option value="1">未通过审核</option>
         <option value="2">已审核</option>
         <option value="3">冻结</option>
     </select>
-    &nbsp;&nbsp;<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查找</a>
+    &nbsp;&nbsp;<a href="javascript:search_adminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查找</a>
 </div>
 
 <style>
@@ -162,6 +162,7 @@
 				</li>
 				<li>
 					<span>管理员姓名：</span>
+					<input type="hidden" id="update_admin_aid">
 					<input type="text" name="admin_aname" id="update_admin_aname" placeholder="请输入您的姓名..." required="true">	
 				</li>
 				<li>
@@ -178,7 +179,7 @@
 				</li>
 				<li>
 					<span>图像：</span>
-					<input type="file" id="update_admin_photo" name="admin_photo" placeholder="请上传您的头像..." required="true">	
+					<input type="file" id="update_admin_photo" name="photo">	
 				</li>
 				<li>
 					<span>状态：</span>
@@ -204,9 +205,11 @@
 		$.post("../../rolesServlet",{op:"findAllRoles"},function(data){
 			var obj = $("#admin_role");
 			var obj1 = $("#update_admin_role");
+			var obj2 = $("#admin_select_rid");
 			$.each(data,function(index,item){
 				obj.append($("<option value='"+item.rid+"'>"+item.rname+"</option>"));
 				obj1.append($("<option value='"+item.rid+"'>"+item.rname+"</option>"));
+				obj2.append($("<option value='"+item.rid+"'>"+item.rname+"</option>"));
 			});
 		},"json");
 	});
@@ -277,7 +280,7 @@
                 $("#admin_email").val("");
                 
                 $("#admin_addAdminInfo").dialog("close");//关闭弹出框
-                $("#admin_dataInfo").datagrid("reload");//刷新数据
+                $(".admin_dataInfo").datagrid("reload");//刷新数据
     		}else{
     			$.messager.alert('失败提示', '管理员信息添加失败...','error');
     		}
@@ -289,14 +292,65 @@
     function updateAdminInfo(row) {
     	console.info(row);
     	$("#admin_updateAdminInfo").dialog("open");
-    	$("#update_admin_role").val(row.rid);
-    	$("#update_admin_aname").val(row.aname);
-    	$("#update_admin_password").val(row.pwd);
-    	$("#update_admin_email").val(row.email);
-    	$("#update_admin_tel").val(row.tel);
+    	var aid = $("#update_admin_aid").val(row.aid);
+    	var rid = $("#update_admin_role").val(row.rid);
+    	var aname = $("#update_admin_aname").val(row.aname);
+    	var password = $("#update_admin_password").val(row.pwd);
+    	var email = $("#update_admin_email").val(row.email);
+    	var tel = $("#update_admin_tel").val(row.tel);
+    	console.info(row.photo);
     	if(row.photo!=""){
     		$("#update_adminInfo_photo").attr("src","../../"+row.photo);
     	}
     	
+    	
+    	
+    }
+    
+    function update_adminInfo() {
+    	var aid = $("#update_admin_aid").val();
+    	var rid = $("#update_admin_role").val();
+    	var aname = $("#update_admin_aname").val();
+    	var password = $("#update_admin_password").val();
+    	var email = $("#update_admin_email").val();
+    	var tel = $("#update_admin_tel").val();
+    	
+    	$.ajaxFileUpload({
+    	    url:"../../adminInfoServlet?op=updateAdminInfo",
+    	    secureuri:false,
+    	    fileElementId:"update_admin_photo",
+    	    dataType:"json",
+    	    data:{rid:rid, aname:aname,password:password,email:email,tel:tel,aid:aid},
+    	    success:function(data, status){
+    	    	data = parseInt($.trim(data));
+    	    	if(data > 0){
+    	    		$.messager.show({title:"成功提示",msg:"管理员信息添加成功",timeout:2000,showType:"slide"});
+    	    		$("#update_admin_aid").val("");
+    	    		$("#update_admin.aname").val("");
+    	    		$("#update_admin_password").val("");
+    	    		$("#update_admin_tel").val("");
+    	    		$("#update_admin_email").val("");
+    	    		
+    	    		$("#admin_updateAdminInfo").dialog("close");
+    	    		$(".admin_dataInfo").datagrid("reload");
+    	    	}
+    	    },
+    	    error:function(data,status,e) {
+    	    	$.messager.alert("失败提示", "管理员信息修改失败", "error");
+    	    }
+    	    
+    	});
+    }
+    
+    //查找
+    function search_adminInfo() {
+    	var rid = $("#admin_select_rid").val();
+    	var aname = $("#admin_select_aname").val();
+    	var status = $("#admin_select_status").val();
+    	
+    	$(".admin_dataInfo").datagrid({
+    		url:"../../adminInfoServlet",
+    		queryParams:{op:"searchAdminInfoByPage",rid:rid,aname:aname,status:status}
+    	});
     }
 </script>

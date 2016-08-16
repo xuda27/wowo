@@ -1,7 +1,9 @@
 package com.yc.wowo.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +33,56 @@ public class AdminInfoServlet extends BasicServlet{
 			findAdminInfoByPage(request, response);
 		}else if("addAdminInfo".equals(op)){
 			addAdminInfo(request, response);
+		}else if("updateAdminInfo".equals(op)){
+			updateAdminInfo(request,response);
+		}else if("searchAdminInfoByPage".equals(op)){
+			searchAdminInfoByPage(request,response);
 		}
 	}
 	
+	/**
+	 * 多条件查询
+	 * @param request
+	 * @param response
+	 */
+	private void searchAdminInfoByPage(HttpServletRequest request,
+			HttpServletResponse response) {
+		String rid = request.getParameter("rid");
+		String aname = request.getParameter("aname");
+		String status = request.getParameter("status");
+		String pageNo = request.getParameter("page");
+		String pageSize = request.getParameter("rows");
+		
+		Map<String,String> map = new HashMap<String, String>();
+		map.put("rid=", rid);
+		map.put(" aname like ", "%"+aname+"%");
+		map.put("status=", status);
+		
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		List<AdminInfo> list =  ab.find(map, Integer.parseInt(pageNo), Integer.parseInt(pageSize));
+		List<AdminInfo> list1 = ab.find(map, null, null);
+		this.out(response, list, list1.size());
+	}
+
+	/**
+	 * 修改管理员信息
+	 * @param request
+	 * @param response
+	 */
+	private void updateAdminInfo(HttpServletRequest request,
+			HttpServletResponse response) {
+		UploadUtil upload = new UploadUtil();
+		PageContext pageContext = JspFactory.getDefaultFactory().getPageContext(this, request, response, null, true, 2048, true);
+		Map<String,String> map = upload.upload(pageContext);
+		String aname = map.get("aname");
+		String rid = map.get("rid");
+		String tel = map.get("tel");
+		String photo = map.get("photo");
+		String aid = map.get("aid");
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		this.out(response, (int)ab.update(aname, rid, tel, photo, aid));
+	}
+
 	/**
 	 * 添加管理员信息
 	 * @param request

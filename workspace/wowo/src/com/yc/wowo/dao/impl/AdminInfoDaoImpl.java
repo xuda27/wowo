@@ -2,6 +2,8 @@ package com.yc.wowo.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.yc.wowo.dao.DBHelper;
 import com.yc.wowo.dao.IAdminInfoDao;
@@ -148,7 +150,7 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		}
 		
 		if(photo!=null){
-			sql+=",photo=?";
+			sql+=",photo=? ";
 			params.add(photo);
 		}
 		sql+=" where aid=?";
@@ -209,6 +211,30 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 			params.add(rid);
 		}
 		return db.findByOne(sql, params);
+	}
+
+	@Override
+	public List<AdminInfo> find(Map<String, String> params, Integer pageNo,
+			Integer pageSize) {
+		DBHelper db = new DBHelper();
+		List<Object> param = new ArrayList<Object>();
+		String sql = "　select * from adminInfos";
+		if(params!=null && params.size()>0){
+			sql+=" where 1=1";
+			Set<String> keys = params.keySet();
+			for(String key : keys){
+				sql+=" and "+key +"=?"; //and rid = ?
+				param.add(params.get(key));
+			}
+		}
+		sql += " order by aid desc";
+		if(pageNo != null){
+			sql = "select * from (select a.*,rownum rn from("+sql+") a where rownum<=?)where rn > ?";
+			param.add(pageNo*pageSize);
+			param.add((pageNo-1)*pageSize);
+		}
+		System.out.println(sql);
+		return db.find(sql, param, AdminInfo.class);
 	}
 
 }

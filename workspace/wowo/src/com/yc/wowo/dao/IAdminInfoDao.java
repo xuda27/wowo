@@ -1,6 +1,7 @@
 package com.yc.wowo.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yc.wowo.entities.AdminInfo;
 
@@ -120,4 +121,6 @@ public interface IAdminInfoDao {
 	 * @return
 	 */
 	public int getTotal(Integer rid);
+	
+	public List<AdminInfo> find(Map<String,String> params,Integer pageNo, Integer pageSize);
 }
