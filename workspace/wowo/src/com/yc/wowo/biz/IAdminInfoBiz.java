@@ -125,4 +125,6 @@ public interface IAdminInfoBiz {
 	public int getTotal(String aname,String email);
 	
 	public List<AdminInfo> find(Map<String,String>params,Integer pageNo,Integer pageSize);
+	
+	public Integer update1(String email, String newpwd);
 }

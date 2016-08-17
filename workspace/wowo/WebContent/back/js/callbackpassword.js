@@ -64,3 +64,26 @@ function getCodeInfo() {
 		}
 	});
 }
+
+function newpassword() {
+	var newpwd = $("#newpwd").val();
+	var rpwds = $("#rpwds").val();
+	var email = $("#email").val();
+	
+	var reg =/^[a-zA-Z0-9_]{5,17}$/;
+	if(!reg.test(newpwd)){
+		$("#newpwd").css("border-color","red");
+	}else if(newpwd != rpwds){
+		$("#rpwds").css("border-color","red");
+	}else if(newpwd == rpwds){
+		$.post("../adminInfoServlet", {op:"newPassword", email:email, pwd:rpwds}, function(data){
+			$.trim(data);
+			if( data == 0){
+				alert("修改密码失败");
+			}else if(data == 1){
+				alert("修改密码成功");
+			}
+		});
+	}
+	
+}

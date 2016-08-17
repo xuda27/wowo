@@ -41,6 +41,17 @@ $(function() {
 						href:"admin.html"
 					});
 				}
+			}else if(node.id=="index_shop2"){
+				if(tab.tabs("exists","店铺信息")){
+					tab.tabs("select","店铺信息");
+				}else{
+					tab.tabs("add",{
+						title:"店铺信息",
+						closable:true,
+						fit:true,
+						href:"managerShopping.html"
+					});
+				}
 			}
 		}
 	});

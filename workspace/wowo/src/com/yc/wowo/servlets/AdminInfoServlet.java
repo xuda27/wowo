@@ -48,6 +48,8 @@ public class AdminInfoServlet extends BasicServlet{
 			retrievePassword(request,response);
 		}else if("testRcode".equals(op)){
 			testRcode(request,response);
+		}else if("newPassword".equals(op)){
+			newPassword(request, response);
 		}
 	}
 
@@ -250,7 +252,7 @@ public class AdminInfoServlet extends BasicServlet{
         Cookie cookie = new Cookie("JSESSIONID", sessionId);
 
         cookie.setPath("/wowo/");//设置session的有效路径，覆盖默认的session的路径
-        cookie.setMaxAge(1);//设置时长为30分钟
+        cookie.setMaxAge(10*60);//设置时长为10分钟
         response.addCookie(cookie);
 
         session.setAttribute("sessionCode", rcode);
@@ -268,5 +270,26 @@ public class AdminInfoServlet extends BasicServlet{
 			rcode += rand;
 		}
 		return rcode;
+	}
+	
+	/**
+	 * 修改密码
+	 * @param request
+	 * @param response
+	 */
+	private void newPassword(HttpServletRequest request,
+			HttpServletResponse response) {
+		String email = request.getParameter("email");
+		String pwd = request.getParameter("pwd");
+		
+		try {
+			email=URLDecoder.decode(email,"utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		int result = ab.update1(email, pwd);
+		this.out(response, result);
 	}
 }

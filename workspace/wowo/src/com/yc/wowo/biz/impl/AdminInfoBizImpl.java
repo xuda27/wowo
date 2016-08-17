@@ -151,6 +151,15 @@ public class AdminInfoBizImpl implements IAdminInfoBiz{
 		return adminInfoDao.find(params, pageNo, pageSize);
 	}
 
+	@Override
+	public Integer update1(String email, String newpwd) {
+		if(email==null || email.equals("") || newpwd ==null || "".equals(newpwd)){
+			return 0;
+		}
+		IAdminInfoDao ai = new AdminInfoDaoImpl();
+		return ai.update1(email, newpwd);
+	}
+
 	
 
 	
