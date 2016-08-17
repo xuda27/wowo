@@ -139,11 +139,19 @@ public class AdminInfoBizImpl implements IAdminInfoBiz{
 	}
 
 	@Override
+	public int getTotal(String aname, String email) {
+		IAdminInfoDao adminInfoDao=new AdminInfoDaoImpl();
+		return adminInfoDao.getTotal(aname, email);
+	}
+	
+	@Override
 	public List<AdminInfo> find(Map<String, String> params, Integer pageNo,
 			Integer pageSize) {
 		IAdminInfoDao	adminInfoDao = new AdminInfoDaoImpl();
 		return adminInfoDao.find(params, pageNo, pageSize);
 	}
+
+	
 
 	
 

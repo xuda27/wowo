@@ -9,7 +9,7 @@ $(function() {
 	},"json");
 	
 	$("#index_content_info").tabs("add",{
-		title:"哈哈",
+		title:"达达软件",
 		closable:true,
 		fit:true, //设置为true时，选项卡的大小将铺满它所在的容器（浏览器）。
 		href:"xd.html"

@@ -1,11 +1,15 @@
 package com.yc.wowo.servlets;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,11 +19,14 @@ import javax.servlet.jsp.PageContext;
 import com.yc.wowo.biz.IAdminInfoBiz;
 import com.yc.wowo.biz.impl.AdminInfoBizImpl;
 import com.yc.wowo.entities.AdminInfo;
+import com.yc.wowo.entities.Mail;
 import com.yc.wowo.utils.AttributeData;
+import com.yc.wowo.utils.MailUtil;
 import com.yc.wowo.utils.UploadUtil;
 
 public class AdminInfoServlet extends BasicServlet{
 	private static final long serialVersionUID = -1895688370031862751L;
+	private String rcode = getRcode();
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
@@ -37,9 +44,13 @@ public class AdminInfoServlet extends BasicServlet{
 			updateAdminInfo(request,response);
 		}else if("searchAdminInfoByPage".equals(op)){
 			searchAdminInfoByPage(request,response);
+		}else if("retrievePassword".equals(op)){
+			retrievePassword(request,response);
+		}else if("testRcode".equals(op)){
+			testRcode(request,response);
 		}
 	}
-	
+
 	/**
 	 * 多条件查询
 	 * @param request
@@ -54,9 +65,9 @@ public class AdminInfoServlet extends BasicServlet{
 		String pageSize = request.getParameter("rows");
 		
 		Map<String,String> map = new HashMap<String, String>();
-		map.put("rid=", rid);
+		map.put("rid", rid);
 		map.put(" aname like ", "%"+aname+"%");
-		map.put("status=", status);
+		map.put("status", status);
 		
 		IAdminInfoBiz ab = new AdminInfoBizImpl();
 		List<AdminInfo> list =  ab.find(map, Integer.parseInt(pageNo), Integer.parseInt(pageSize));
@@ -165,5 +176,97 @@ public class AdminInfoServlet extends BasicServlet{
 			 result = 1;
 		 }
 		this.out(response, result);
+	}
+	
+	/**
+	 * 验证用户名和邮箱 并发送验证码
+	 * @param request
+	 * @param response
+	 */
+	private void retrievePassword(HttpServletRequest request,
+			HttpServletResponse response) {
+		String username = request.getParameter("username");
+		String email = request.getParameter("email");
+		try {
+			email=URLDecoder.decode(email,"utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} 
+		System.out.println(email);
+		
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		
+		//result == 0 username email为空  或者 数据库没有该信息
+		int result = ab.getTotal(username, email);
+		if(result == 0){
+			this.out(response, 0);
+			return;
+		}
+		Mail mail = new Mail();
+		mail.setMessage(mail.getMessage()+rcode);
+		mail.setReceiver(email);
+		MailUtil mu = new MailUtil();
+		boolean status = mu.send(mail);
+		
+		if(!status){
+			this.out(response, 0);
+			return;
+		}
+		setRcodeSession(request, response);
+		this.out(response, 1);
+	}
+	
+	/**
+	 * 验证验证码
+	 * @param request
+	 * @param response
+	 */
+	private void testRcode(HttpServletRequest request,
+			HttpServletResponse response) {
+		String rcode = request.getParameter("rcode");
+		String sessionCode = (String) request.getSession().getAttribute("sessionCode");
+		int result = 0;
+		if(rcode == null || "".equals(rcode)){ // 输入的验证码不能为空
+			result = 0 ;
+		}else if(sessionCode == null || "".equals(sessionCode)){ // 未发送邮件 session 验证码过期
+			result = 1;
+		}else if(!sessionCode.equals(rcode)){ // 验证码错误
+			result = 2;
+		}else if(sessionCode.equals(rcode)){ // 验证成功
+			result = 3;
+		}
+		this.out(response, result);
+	}
+	
+	/**
+	 * 创建session 存验证码
+	 * @param request
+	 * @param response
+	 */
+	private void setRcodeSession(HttpServletRequest request,
+			HttpServletResponse response) {
+		HttpSession session = request.getSession();
+        String sessionId = session.getId();
+        Cookie cookie = new Cookie("JSESSIONID", sessionId);
+
+        cookie.setPath("/wowo/");//设置session的有效路径，覆盖默认的session的路径
+        cookie.setMaxAge(1);//设置时长为30分钟
+        response.addCookie(cookie);
+
+        session.setAttribute("sessionCode", rcode);
+	}
+
+	/**
+	 * 获取随机验证码
+	 * @return rcode
+	 */
+	private String getRcode() {
+		Random random = new Random();
+		String rcode = "";
+		for (int i = 0; i < 4; i++) {
+			String rand = String.valueOf(random.nextInt(10));
+			rcode += rand;
+		}
+		return rcode;
 	}
 }

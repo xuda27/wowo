@@ -214,6 +214,19 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 	}
 
 	@Override
+	public int getTotal(String aname, String email) {
+		if("".equals(aname) || "".equals(email) || aname==null || email==null){
+			return 0;
+		}
+		DBHelper db = new DBHelper();
+		String sql = "select count(aid) from adminInfo where aname = ? and email = ?";
+		List<Object> params = new ArrayList<Object>();
+		params.add(aname);
+		params.add(email);
+		return db.findByOne(sql, params);
+	}
+	
+	@Override
 	public List<AdminInfo> find(Map<String, String> params, Integer pageNo,
 			Integer pageSize) {
 		DBHelper db = new DBHelper();
@@ -236,5 +249,7 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		System.out.println(sql);
 		return db.find(sql, param, AdminInfo.class);
 	}
+
+	
 
 }

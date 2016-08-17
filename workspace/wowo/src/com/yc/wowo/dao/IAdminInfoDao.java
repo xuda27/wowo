@@ -122,5 +122,13 @@ public interface IAdminInfoDao {
 	 */
 	public int getTotal(Integer rid);
 	
+	/**
+	 * 获取总记录
+	 * @param aname
+	 * @param email
+	 * @return
+	 */
+	public int getTotal(String aname,String email);
+	
 	public List<AdminInfo> find(Map<String,String> params,Integer pageNo, Integer pageSize);
 }
