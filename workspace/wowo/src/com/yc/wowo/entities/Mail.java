@@ -1,6 +1,5 @@
 package com.yc.wowo.entities;
 
-import java.io.Serializable;
 
 /**
  * Mail属性实体

@@ -18,7 +18,7 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		if(name.contains("@")){  //说明是登录邮箱
 			sql="select * from adminInfos where email=? and pwd=? and status=2 and rid=?";
 		}else{
-			sql="select * from adminInfos where name=? and pwd=? and status=2 and rid=?";
+			sql="select * from adminInfos where aname=? and pwd=? and status=2 and rid=?";
 		}
 		List<Object> params = new ArrayList<Object>();
 		params.add(name);

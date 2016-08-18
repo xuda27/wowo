@@ -26,7 +26,7 @@ import com.yc.wowo.utils.UploadUtil;
 
 public class AdminInfoServlet extends BasicServlet{
 	private static final long serialVersionUID = -1895688370031862751L;
-	private String rcode = getRcode();
+//	private String rcode = getRcode(); //写在外面 30分钟内  验证码不会变  线程安全问题
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
@@ -181,7 +181,7 @@ public class AdminInfoServlet extends BasicServlet{
 	}
 	
 	/**
-	 * 验证用户名和邮箱 并发送验证码
+	 * 验证用户名和邮箱 并发送验证码 将验证码存进session
 	 * @param request
 	 * @param response
 	 */
@@ -205,6 +205,7 @@ public class AdminInfoServlet extends BasicServlet{
 			return;
 		}
 		Mail mail = new Mail();
+		String rcode = getRcode();
 		mail.setMessage(mail.getMessage()+rcode);
 		mail.setReceiver(email);
 		MailUtil mu = new MailUtil();
@@ -214,7 +215,7 @@ public class AdminInfoServlet extends BasicServlet{
 			this.out(response, 0);
 			return;
 		}
-		setRcodeSession(request, response);
+		setRcodeSession(request, response, rcode);
 		this.out(response, 1);
 	}
 	
@@ -246,7 +247,7 @@ public class AdminInfoServlet extends BasicServlet{
 	 * @param response
 	 */
 	private void setRcodeSession(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response,String rcode) {
 		HttpSession session = request.getSession();
         String sessionId = session.getId();
         Cookie cookie = new Cookie("JSESSIONID", sessionId);
