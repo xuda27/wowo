@@ -14,6 +14,8 @@ public interface IAdminInfoBiz {
 	 */
 	public AdminInfo login(String name,String pwd,String rid);
 	
+	public List<AdminInfo> find();
+	
 	/**
 	 * 根据编号查询管理员信息
 	 * @param aid：要查询的管理员编号

@@ -24,9 +24,6 @@ public class AdminInfoBizImpl implements IAdminInfoBiz{
 
 	@Override
 	public AdminInfo find(Integer aid) {
-		if(aid==null || "".equals(aid)){
-			return null;
-		}
 		IAdminInfoDao adminInfoDao=new AdminInfoDaoImpl();
 		return adminInfoDao.find(aid);
 	}
@@ -158,6 +155,12 @@ public class AdminInfoBizImpl implements IAdminInfoBiz{
 		}
 		IAdminInfoDao ai = new AdminInfoDaoImpl();
 		return ai.update1(email, newpwd);
+	}
+
+	@Override
+	public List<AdminInfo> find() {
+		IAdminInfoDao ai = new AdminInfoDaoImpl();
+		return ai.find();
 	}
 
 	

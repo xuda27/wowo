@@ -25,7 +25,7 @@ public interface IAdminInfoDao {
 	 * @param aid：要查询的管理员编号
 	 * @return：满足条件的管理员信息
 	 */
-	public AdminInfo find(Integer aid);
+	public List<AdminInfo> find();
 	
 	/**
 	 * 分页查询管理员信息
@@ -133,4 +133,6 @@ public interface IAdminInfoDao {
 	public List<AdminInfo> find(Map<String,String> params,Integer pageNo, Integer pageSize);
 	
 	public Integer update1(String email, String newpwd);
+	
+	public AdminInfo find(Integer aid);
 }

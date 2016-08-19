@@ -50,7 +50,22 @@ public class AdminInfoServlet extends BasicServlet{
 			testRcode(request,response);
 		}else if("newPassword".equals(op)){
 			newPassword(request, response);
+		}else if("deleteAdminInfo".equals(op)){
+			deleteAdminInfo(request,response);
 		}
+	}
+	
+	/**
+	 * 删除管理员信息
+	 * @param request
+	 * @param response
+	 */
+	private void deleteAdminInfo(HttpServletRequest request,
+		HttpServletResponse response) {
+		String aid = request.getParameter("aid");
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		int result = ab.del(aid);
+		this.out(response, result);
 	}
 
 	/**
@@ -67,9 +82,9 @@ public class AdminInfoServlet extends BasicServlet{
 		String pageSize = request.getParameter("rows");
 		
 		Map<String,String> map = new HashMap<String, String>();
-		map.put("rid", rid);
+		map.put("rid=", rid);
 		map.put(" aname like ", "%"+aname+"%");
-		map.put("status", status);
+		map.put("status=", status);
 		
 		IAdminInfoBiz ab = new AdminInfoBizImpl();
 		List<AdminInfo> list =  ab.find(map, Integer.parseInt(pageNo), Integer.parseInt(pageSize));

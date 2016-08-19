@@ -26,7 +26,9 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		params.add(rid);
 		return db.findByOne(sql, params, AdminInfo.class);
 	}
-
+	
+	
+	
 	@Override
 	public AdminInfo find(Integer aid) {
 		DBHelper db=new DBHelper();
@@ -191,9 +193,9 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		String sql=null;
 		List<Object> params=new ArrayList<Object>();
 		if(aid.contains(",") && !aid.contains(" or")){
-			sql="update adminInfo set status=4 where aid in("+aid+")";
+			sql="update adminInfo set status=3 where aid in("+aid+")";
 		}else{
-			sql="update adminInfo set status=4 where aid=?";
+			sql="update adminInfo set status=3 where aid=?";
 			params.add(aid);
 		}
 		return db.doUpdate(sql, params);
@@ -236,7 +238,7 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 			sql+=" where 1=1";
 			Set<String> keys = params.keySet();
 			for(String key : keys){
-				sql+=" and "+key +"=?"; //and rid = ?
+				sql+=" and "+key +"?"; //and rid = ?
 				param.add(params.get(key));
 			}
 		}
@@ -259,6 +261,15 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		DBHelper db = new DBHelper();
 		
 		return db.doUpdate(sql, param);
+	}
+
+
+
+	@Override
+	public List<AdminInfo> find() {
+		String sql = "select * from adminInfos";
+		DBHelper db = new DBHelper();
+		return db.find(sql, null, AdminInfo.class);
 	}
 
 	

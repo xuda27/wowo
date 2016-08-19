@@ -3,14 +3,14 @@
 <div id="admin_search" style="height:28px">
     <a href="javascript:addAdminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-add'"  style="float: left">添加</a>
     <div class="datagrid-btn-separator"></div>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" style="float: left">删除</a>
+    <a href="javascript:deleteAdminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" style="float: left">删除</a>
     <div class="datagrid-btn-separator"></div>
     <label>请选择角色：</label><select name="role" id="admin_select_rid">
-    <option value='-1'>--请选择--</option>
+    <option value=''>--请选择--</option>
     </select>&nbsp;
     <label>请输入管理员姓名：</label><input type="text" name="aname" id="admin_select_aname">
     <label>请选择状态：</label><select name="status" id="admin_select_status">
-        <option value="-1">--请选择--</option>
+        <option value="">--请选择--</option>
         <option value="0">未审核</option>
         <option value="1">未通过审核</option>
         <option value="2">已审核</option>
@@ -353,4 +353,36 @@
     		queryParams:{op:"searchAdminInfoByPage",rid:rid,aname:aname,status:status}
     	});
     }
+    
+    
+    //删除
+    function deleteAdminInfo(){
+       //获取所有被选中的行
+       var rows = datagrid.datagrid("getChecked");
+       if(rows.length <= 0){
+            $.messager.show({title: '温馨提示', msg: '请选择要删除的数据', timeout: 2000, showType: 'slide'});
+       }else{
+            $.messager.confirm('删除确认', '您确定要删除选中的数据吗？', function(rt) {
+	           	if (rt) { //如果确认要删除，则获取所有要删除的数据的id
+	            	var rids = '';
+	                var i ;
+	                for (i = 0; i < rows.length-1; i++) {
+	                	rids += rows[i].aid + ",";
+	                }
+			        rids += rows[i].aid;
+			
+			                //发送到后台，从数据库中删除此数据
+			        $.post('../../adminInfoServlet', {op: 'deleteAdminInfo', aid: rids}, function(data){
+			        	data = parseInt( $.trim(data) );
+			            if(data > 0){
+			               $.messager.show({title: '成功提示', msg: '管理员删除成功', timeout: 2000, showType: 'slide'});
+			               datagrid.datagrid("reload");//重新加载数据
+			            }else{
+			                 $.messager.alert('失败提示', '管理员信息删除失败...', 'error');
+			            } 
+			        });
+	        	}
+        	});
+        }
+	}
 </script>

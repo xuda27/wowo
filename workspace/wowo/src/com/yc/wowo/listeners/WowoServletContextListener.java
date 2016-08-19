@@ -5,8 +5,11 @@ import java.util.List;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import com.yc.wowo.biz.IAdminInfoBiz;
 import com.yc.wowo.biz.IRolesBiz;
+import com.yc.wowo.biz.impl.AdminInfoBizImpl;
 import com.yc.wowo.biz.impl.RolesBizImpl;
+import com.yc.wowo.entities.AdminInfo;
 import com.yc.wowo.entities.Roles;
 import com.yc.wowo.utils.AttributeData;
 /**
@@ -22,6 +25,11 @@ public class WowoServletContextListener implements ServletContextListener {
 		IRolesBiz roleBiz = new RolesBizImpl();
 		List<Roles> list = roleBiz.find();
 		sce.getServletContext().setAttribute(AttributeData.ALLROLES, list);
+		
+		//将管理员查询出来存放到application中
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		List<AdminInfo> list1 = ab.find();
+		sce.getServletContext().setAttribute(AttributeData.CURRENTADMINLOGIN, list1);
 	}
 
 	@Override
