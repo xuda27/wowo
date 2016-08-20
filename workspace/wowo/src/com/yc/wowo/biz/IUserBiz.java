@@ -1,10 +1,10 @@
-package com.yc.wowo.dao;
+package com.yc.wowo.biz;
 
 import java.util.List;
 
 import com.yc.wowo.entities.UserInfo;
 
-public interface IUserInfo {
+public interface IUserBiz {
 	
 	/**
 	 * 添加会员信息

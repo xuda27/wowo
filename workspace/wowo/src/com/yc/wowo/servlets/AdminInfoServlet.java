@@ -50,11 +50,26 @@ public class AdminInfoServlet extends BasicServlet{
 			testRcode(request,response);
 		}else if("newPassword".equals(op)){
 			newPassword(request, response);
-		}else if("deleteAdminInfo".equals(op)){
+		}else if("deleteAdminInfo".equals(op)){ // 删除管理员 冻结管理员
 			deleteAdminInfo(request,response);
+		}else if("testAdminName".equals(op)){ // 管理员注册 测试用户名重名
+			testAdminName(request, response);
+		}else if("testEmail".equals(op)){ // 管理员注册 测试邮箱是否已经被注册
+			testEmail(request, response);
+		}else if("registeraAdmin".equals(op)){ // 管理员注册
+			registeraAdmin(request, response);
 		}
 	}
 	
+
+	
+
+
+
+
+
+
+
 	/**
 	 * 删除管理员信息
 	 * @param request
@@ -307,5 +322,74 @@ public class AdminInfoServlet extends BasicServlet{
 		IAdminInfoBiz ab = new AdminInfoBizImpl();
 		int result = ab.update1(email, pwd);
 		this.out(response, result);
+	}
+	
+	/**
+	 * 管理员注册 测试用户名已经被注册
+	 * @param request
+	 * @param response
+	 */
+	private void testAdminName(HttpServletRequest request,
+			HttpServletResponse response) {
+		String aname = request.getParameter("aname");
+		List<AdminInfo> list = (List<AdminInfo>) request.getServletContext().getAttribute(AttributeData.CURRENTADMINLOGIN);
+		for(AdminInfo admin : list){
+			if(aname.equals( admin.getAname() )){ //重名
+				this.out(response, 0);
+				return;
+			}
+		}
+		this.out(response, 1);
+	}
+	
+	/**
+	 * 管理员注册  测试邮箱是否已经被注册
+	 * @param request
+	 * @param response
+	 */
+	private void testEmail(HttpServletRequest request,
+			HttpServletResponse response) {
+		String aname = request.getParameter("email");
+		List<AdminInfo> list = (List<AdminInfo>) request.getServletContext().getAttribute(AttributeData.CURRENTADMINLOGIN);
+		for(AdminInfo admin : list){
+			if(aname.equals( admin.getEmail() )){ //重名
+				this.out(response, 0);
+				return;
+			}
+		}
+		this.out(response, 1);
+	}
+	
+	/**
+	 * 管理员注册
+	 * @param request
+	 * @param response
+	 */
+	private void registeraAdmin(HttpServletRequest request,
+			HttpServletResponse response) {
+		String rid = request.getParameter("rid");
+		String aname = request.getParameter("aname");
+		String pwd = request.getParameter("pwd");
+		String email = request.getParameter("email");
+		String tel = request.getParameter("tel");
+		
+		
+		
+		AdminInfo a = new AdminInfo();
+		a.setRid(Integer.parseInt(rid));
+		a.setAname(aname);
+		a.setpwd(pwd);
+		a.setEmail(email);
+		a.setTel(tel);
+		
+		List<AdminInfo> list =  (List<AdminInfo>) request.getServletContext().getAttribute(AttributeData.CURRENTADMINLOGIN);
+		list.add(a);
+		request.getServletContext().removeAttribute(AttributeData.CURRENTADMINLOGIN);
+		request.getServletContext().setAttribute(AttributeData.CURRENTADMINLOGIN, list);
+		
+		IAdminInfoBiz ab = new AdminInfoBizImpl();
+		int result = ab.add(aname, pwd, rid, email, tel, "");
+		this.out(response, result);
+		
 	}
 }

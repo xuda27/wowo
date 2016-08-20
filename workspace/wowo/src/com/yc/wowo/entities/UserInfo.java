@@ -79,6 +79,9 @@ public class UserInfo implements Serializable{
 	public void setArea(String area) {
 		this.area = area;
 	}
+	public String getAddress(){
+		return prov+" "+city+" "+area;
+	}
 	public Integer getGrade() {
 		return grade;
 	}
@@ -90,6 +93,16 @@ public class UserInfo implements Serializable{
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	
+	public String getStatusStr() {
+		if(status == 1){
+			return "正常";
+		}else if(status == 0){
+			return "已禁用";
+		}else{
+			return "错误";
+		}
 	}
 	@Override
 	public int hashCode() {

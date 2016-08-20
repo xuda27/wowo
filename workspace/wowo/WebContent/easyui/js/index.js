@@ -41,7 +41,7 @@ $(function() {
 						href:"admin.html"
 					});
 				}
-			}else if(node.id=="index_shop2"){
+			}else if(node.id=="index_shop3"){
 				if(tab.tabs("exists","店铺信息")){
 					tab.tabs("select","店铺信息");
 				}else{
@@ -50,6 +50,17 @@ $(function() {
 						closable:true,
 						fit:true,
 						href:"managerShopping.html"
+					});
+				}
+			}else if (node.id == "index_user") {
+				if (tab.tabs("exists","会员信息")) {
+					tab.tabs("select","会员信息");
+				} else {
+					tab.tabs("add",{
+						title:"会员信息",
+						closable:true,
+						fit:true,
+						href:"user.html"
 					});
 				}
 			}

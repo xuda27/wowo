@@ -22,6 +22,15 @@ $(function() {
     });
 });
 
+$(function () {
+
+    $('#email').emailComplete({
+        opacity: 0.7,
+        radius: 4
+    });
+
+});
+
 /*输入验证码后的下一步，即新密码设置*/
 function nextstep() {
 	var rcode = $("#rcode").val();

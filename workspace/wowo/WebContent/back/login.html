@@ -85,7 +85,7 @@
             <div class="panel">
                 <div class="panel-heading login-top">用户注册</div>
                 <div class="panel-body">
-                    <form class="form-group col-lg-12" action="" method="post" role="form">
+                    <form id="register-form" class="form-group col-lg-12" role="form" onsubmit="return toSubmit()">
                         <div class="input-group">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">角&nbsp;&nbsp;色<span class="caret"></span></button>
@@ -97,12 +97,12 @@
                                     <li><a id="role5" href="javascript:login('role5','role')">超级管理员</a></li>-->
                                 </ul>
                             </div>
-                            <input id="role" type="text" class="form-control" disabled="disabled" required placeholder="请选择角色"/>							<label class="input-group-addon"><a href="javascript:backlogin()" class="errorinfo">我已有账号...</a></label>
+                            <input id="role" type="text" class="form-control" disabled="disabled" required placeholder="请选择角色"/>							<label class="input-group-addon"><a href="javascript:backlogin()" class="errorinfo" style="color: blue;">我已有账号...</a></label>
                         </div>
                         <br />
                         <div class="input-group">
                             <label for="rname" class="input-group-addon">用户名</label>
-                            <input type="text" class="form-control" name="uname" id="rname" required placeholder="请输入用户名" maxlength="12" onblur="blurName()" onfocus="focusName()"/ >								<label id="label-rname"  class="input-group-addon promptinfo" id=>由2-12位的中文、字母、数字和下划线组成</label>
+                            <input type="text" class="form-control" name="uname" id="rname" required placeholder="请输入用户名" maxlength="12" onblur="blurName()" onfocus="focusName()"/ >								<label id="label-rname"  class="input-group-addon promptinfo">由2-12位的中文、字母、数字和下划线组成</label>
                         </div>
                         <br />
                         <div class="input-group">

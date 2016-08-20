@@ -48,4 +48,22 @@
   <listener>
     <listener-class>com.yc.wowo.listeners.WowoServletContextListener</listener-class>
   </listener>
+  <servlet>
+    <servlet-name>UserServlet</servlet-name>
+    <servlet-class>com.yc.wowo.servlets.UserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>UserServlet</servlet-name>
+    <url-pattern>/userServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>sendMailServlet</display-name>
+    <servlet-name>sendMailServlet</servlet-name>
+    <servlet-class>com.yc.wowo.servlets.SendMailServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>sendMailServlet</servlet-name>
+    <url-pattern>/sendMailServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -7,10 +7,13 @@ import javax.servlet.ServletContextListener;
 
 import com.yc.wowo.biz.IAdminInfoBiz;
 import com.yc.wowo.biz.IRolesBiz;
+import com.yc.wowo.biz.IUserBiz;
 import com.yc.wowo.biz.impl.AdminInfoBizImpl;
 import com.yc.wowo.biz.impl.RolesBizImpl;
+import com.yc.wowo.biz.impl.UserBizImpl;
 import com.yc.wowo.entities.AdminInfo;
 import com.yc.wowo.entities.Roles;
+import com.yc.wowo.entities.UserInfo;
 import com.yc.wowo.utils.AttributeData;
 /**
  * 应用程序加载的监听
@@ -30,11 +33,18 @@ public class WowoServletContextListener implements ServletContextListener {
 		IAdminInfoBiz ab = new AdminInfoBizImpl();
 		List<AdminInfo> list1 = ab.find();
 		sce.getServletContext().setAttribute(AttributeData.CURRENTADMINLOGIN, list1);
+		
+		//将会员查询出来存放到ServletContext域中
+		IUserBiz ub = new UserBizImpl();
+		List<UserInfo> list2 = ub.find();
+		sce.getServletContext().setAttribute(AttributeData.ALLUSER, list2);
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		sce.getServletContext().removeAttribute(AttributeData.ALLROLES);
+		sce.getServletContext().removeAttribute(AttributeData.CURRENTADMINLOGIN);
+		sce.getServletContext().removeAttribute(AttributeData.ALLUSER);
 	}
 
 }

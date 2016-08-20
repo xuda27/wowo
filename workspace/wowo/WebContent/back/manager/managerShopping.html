@@ -5,7 +5,7 @@
 	}
 	
 	.add_shopping_info>ul>li>span {
-		display:inlibe-block;
+		display:inline-block;
 		width:120px;
 		text-align:right;
 		margin-right:10px;
@@ -17,13 +17,12 @@
 	}
 </style>
 
+
 <div class="add_shopping_info">
 	<ul>
 		<li>
 			<span>商家编号:</span> 
-			<select name="manager_shopping_aid" id="manager_shopping_aid">
-		
-			</select>
+			<input type="text" name="manager_shopping_aid" id="manager_shopping_aid" readonly="true">
 		</li>
 		<li>
 			<span>店铺名称:</span> 
@@ -78,3 +77,4 @@
 	//
 	var ue = UE.getEditor('editor');
 </script>
+
