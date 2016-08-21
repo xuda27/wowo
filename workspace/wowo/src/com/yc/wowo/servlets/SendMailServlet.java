@@ -44,8 +44,8 @@ public class SendMailServlet extends BasicServlet {
 		session.setAttribute("sessionCode", code);
 		
 		Mail email = new Mail();
-		email.setMessage(email.getMessage()+code);
-		email.setReceiver("xuda27@qq.com");
+		email.setMessage("亲爱的"+uname+","+email.getMessage()+code);
+		email.setReceiver(mail);
 		MailUtil mailUtil = new MailUtil();
 		boolean  bl = mailUtil.send(email);
 		
@@ -64,10 +64,10 @@ public class SendMailServlet extends BasicServlet {
 			
 			@Override
 			public void run() {
-				session.removeAttribute("sendCode");
+				session.removeAttribute("sessionCode");
 				timer.cancel();
 			}
-		}, 10000);
+		}, 100000);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

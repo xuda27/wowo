@@ -183,7 +183,14 @@
 				</li>
 				<li>
 					<span>状态：</span>
-					<input type="text" id="update_admin_status" name="admin_status" placeholder="请填写您的状态..." required="true">	
+					<input type="text"  placeholder="请填写您的状态..." >
+					<select id="update_admin_status" name="admin_status" required="true">
+						<option value=-1>请填写您的状态...</option>
+						<option value=0>未审核</option>
+						<option value=1>审核未通过 </option>
+						<option value=2>已审核可登陆</option>
+						<option value=3>冻结</option>
+					</select>	
 				</li>
 				
 			</ul>

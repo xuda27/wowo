@@ -66,4 +66,14 @@
     <servlet-name>sendMailServlet</servlet-name>
     <url-pattern>/sendMailServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GoodsTypeServlet</display-name>
+    <servlet-name>goodsTypeServlet</servlet-name>
+    <servlet-class>com.yc.wowo.servlets.GoodsTypeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GoodsTypeServlet</servlet-name>
+    <url-pattern>/goodsTypeServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

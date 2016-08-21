@@ -1,0 +1,147 @@
+<table class="message_dataInfo"></table>
+
+<script type="text/javascript">
+    var editRow = undefined;
+    var flag;
+    var statusObj = [{status : 1, statusStr : '正常'}, {status : 0, statusStr : '冻结' }];
+    var datagrid = $(".message_dataInfo").datagrid({   
+        url : '../../messageServlet',
+        queryParams : {op : "findMessageByPage"},
+        loadMsg : "数据加载中",// 当从远程站点载入数据时，显示的一条快捷信息。  
+        fitColumns : true,//设置为true将自动使列适应表格宽度以防止出现水平滚动。
+        striped: true,
+        nowrap : true,//设置为true，当数据长度超出列宽时将会自动截取。
+        pagination : true,//设置true将在数据表格底部显示分页工具栏。
+        fit : true,
+        rownumbers : true,//行号
+        pageList :  [10, 20, 30, 40, 50],//当设置分页属性时，初始化每页记录数列表。
+        pageSize : 10,
+        sortName : "mid",//当数据表格初始化时以哪一列来排序。
+        remoteSort : false,//定义是否通过远程服务器对数据排序。
+
+        columns: [[
+            {field: 'mids', title: '选择', width: 100, align: 'center', checkbox: true}, 
+            {field: 'mid', title: '消息编号', width: 100, align: 'center', sortable: true},         
+            {field: 'title', title: '消息抬头', width: 100, align: 'center', sortable: true},  
+            {field: 'content', title: '消息内容', width: 100, align: 'center', sortable: true},
+            {field: 'mdate', title: '消息时间', width: 100, align: 'center', sortable: true},
+            {field: 'aid', title: '管理员', width: 100, align: 'center', sortable: true},
+     
+        ]], //数据表格的列是一个对象数组  
+        
+        toolbar: [{//通过数组定义工具栏:
+            iconCls: 'icon-add',
+            text:"添加",
+            handler: function(){//用户选择编辑时
+                flag = "添加";
+                op = "addmessage";
+                if(editRow != undefined ){//说明当前有正在编辑的行
+                    datagrid.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
+                    datagrid.datagrid("endEdit", editRow);//结束正在被编辑的行
+                    editRow = undefined;
+                }else{
+                    datagrid.datagrid('insertRow',{
+                        index: 0,   // index start with 0
+                        row: {
+                        }
+                    });//在前面添加一行
+                    datagrid.datagrid('beginEdit', 0);//开始编辑第一行
+                    editRow = 0; //记录当前正在被编辑的行
+                }
+            }
+        },'-',{
+               iconCls: 'icon-edit',
+               text:"修改",
+               handler: function(){ //当用户选择修改时。
+                op = "updatemessage";
+                flag = "修改";
+                var rows = datagrid.datagrid('getChecked')[0];//返回所有行的复选框已被选中
+                if (rows == undefined) { //说明用户没有选择要修改的数据
+                    $.messager.show({title: '温馨提示', msg: '请选择要修改的数据', timeout: 2000, showType: 'slide'});
+                }else {
+                    //判断有木有正在被编辑的行，如果有则先关闭正在被编辑的行
+                    if (editRow != undefined) {
+                        datagrid.datagrid('rejectChanges');
+                        datagrid.datagrid('endEdit', editRow);//结束编辑正在被编辑的行。
+                        editRow = undefined;
+                    }
+                    //开启要修改的那一行的编辑
+                    var index = datagrid.datagrid("getRowIndex",rows);//先获取要修改的行的索引
+                    datagrid.datagrid("updateRow",{index: index, rows: rows});//开启更新
+                    datagrid.datagrid('beginEdit', index);
+                    editRow = index; //记录当前被编辑的行号
+                 }
+               }
+        },'-',{
+               iconCls: 'icon-remove',
+               text:"删除",
+               handler: function(){
+                  //获取所有被选中的行
+                  var rows = datagrid.datagrid("getChecked");
+                  if(rows.length <= 0){
+                      $.messager.show({title: '温馨提示', msg: '请选择要删除的数据', timeout: 2000, showType: 'slide'});
+                  }else{
+                    $.messager.confirm('删除确认', '您确定要删除选中的数据吗？', function(rt) {
+                        if (rt) { //如果确认要删除，则获取所有要删除的数据的id
+                            var mids = '';
+                            var i ;
+                            for (i = 0; i < rows.length-1; i++) {
+                                mids += rows[i].mid + ",";
+                            }
+                            mids += rows[i].mid;
+
+                            //发送到后台，从数据库中删除此数据
+                            $.post('../../messageServlet', {op: 'deletemessage', mid: mids}, function(data){
+                                data = parseInt( $.trim(data) );
+                                if(data > 0){
+                                    $.messager.show({title: '成功提示', msg: '消息删除成功', timeout: 2000, showType: 'slide'});
+                                    datagrid.datagrid("reload");//重新加载数据
+                                }else{
+                                    $.messager.alert('失败提示', '消息信息删除失败...', 'error');
+                                } 
+                            });
+                        }
+                    });
+                  }
+               }
+        },'-',{
+               iconCls: 'icon-save',
+               text:"保存",
+               handler: function(){//当用户选择保存时
+                   var rows = datagrid.datagrid("getChanges")[0]; //获取当期正在被编辑的行
+                   if(rows.uname==null||rows.pwd==""||rows.tel==null||rows.address==""||rows.status==""||rows.status==null){
+                       $.messager.show({title: '温馨提示', msg: '请输入完整的数据', timeout: 2000, showType: 'slide'});
+                   }
+                   datagrid.datagrid("endEdit", editRow);//结束编辑
+                   if (rows == undefined) { //说明用户没有修改任何信息
+                       datagrid.datagrid("rejectChanges"); //回滚
+                       datagrid.datagrid("unselectAll");//取消所有选择页面
+                       editRow = undefined;
+                   }else {
+                       rows.op = op;
+                       $.post("../../messageServlet", rows, function(data){
+                           data = parseInt($.trim(data));
+                           if (data > 0) {
+                               $.messager.show({
+                                   title : '成功提示',
+                                   msg : '消息'+flag+'成功...',
+                                   timeout : 2000,
+                                   showType:'slide'
+                               });
+                               rows = null;
+                               datagrid.datagrid( "reload" ); //重新加载数据
+                               datagrid.datagrid( "rejectChanges" ); 
+                               datagrid.datagrid( "unselectAll" );
+                           }else {
+                               $.messager.alert('失败提示','消息'+flag+'失败...','error');
+                           }
+                       });
+                   }
+               }
+        },'-',{
+               iconCls: 'icon-undo',
+               text:"撤销",
+               handler: function(){}
+        }]
+    });
+</script>

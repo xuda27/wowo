@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.yc.wowo.biz.IRolesBiz;
 import com.yc.wowo.biz.IUserBiz;
@@ -30,13 +31,17 @@ public class UserServlet extends BasicServlet {
 			findUserByPage(request,response);
 		}else if("regUser".equals(op)){
 			regUser(request,response);
+		}else if("testUsername".equals(op)){
+			testUsername(request,response);
+		}else if("testCode".equals(op)){
+			testCode(request,response);
 		}
 		
 		
 		
 	}
 	
-	
+
 
 	/**
 	 * 前台注册会员
@@ -55,17 +60,7 @@ public class UserServlet extends BasicServlet {
 		
 		IUserBiz ub = new UserBizImpl();
 		int result = ub.add(email, uname, pwd, tel, prov, city, area);
-		try {
-			if(result>0){
-				response.getWriter().write("注册成功，正在跳转登录界面，请稍后...");
-				response.sendRedirect("/wowo/regok.html");
-			}else {
-				response.getWriter().write("注册失败");
-				response.sendRedirect("/wowo/reg.html");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.out(response, result);
 	}
 	
 	/**
@@ -83,4 +78,40 @@ public class UserServlet extends BasicServlet {
 		this.out(response, list, rs.size());
 	}
 
+	/**
+	 * 验证用户名是否被注册
+	 * @param request
+	 * @param response
+	 */
+	private void testUsername(HttpServletRequest request,
+			HttpServletResponse response) {
+		String uname = request.getParameter("uname");
+		List<UserInfo> list = (List<UserInfo>) request.getServletContext().getAttribute(AttributeData.ALLUSER);
+		for(UserInfo u :list){
+			if(u.getUname().equals(uname)){
+				this.out(response, 1);
+				return;
+			}
+		}
+		
+		this.out(response, 0);
+	}
+	
+	/**
+	 * 验证码判断
+	 * @param request
+	 * @param response
+	 */
+	private void testCode(HttpServletRequest request,
+			HttpServletResponse response) {
+		String code = request.getParameter("code");
+		 HttpSession session = request.getSession();
+		 String scode =  (String) session.getAttribute("sessionCode");
+		 if(code.equals(scode)){ // 正确
+			 this.out(response, 0);
+			 return	;
+		 }
+		 
+		 this.out(response, 1); // 错误
+	}
 }

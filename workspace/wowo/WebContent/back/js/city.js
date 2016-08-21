@@ -30,7 +30,7 @@ function createIEXmlDom() {
 $(function() {
     var xmlDom = createXmlDom();
     xmlDom.async = false;
-    xmlDom.load("city.xml");
+    xmlDom.load("../../city.xml");
 
     var province = document.getElementById("manager_shopping_prov");
     var city = document.getElementById("manager_shopping_city");

@@ -1,15 +1,11 @@
-package com.yc.wowo.dao;
+package com.yc.wowo.biz;
 
 import java.util.List;
 
 import com.yc.wowo.entities.GoodsType;
+import com.yc.wowo.entities.UserInfo;
 
-/**
- * 
- * @author Eden
- *
- */
-public interface IGoodsType {
+public interface IGoodsTypeBiz {
 	
 	/**
 	 * 分页查询

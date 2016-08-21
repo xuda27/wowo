@@ -73,12 +73,12 @@ $(function() {
     });
 
     checkInfo();
-    
+    $("#mybutton").attr("disabled","disabled");
     var box = document.getElementById("argee");
     if(box.checked == false){
-    	$("#button").attr("disabled",true);
+    	$("#mybutton").attr("disabled","disabled");
     }else{
-    	$("#button").attr("disabled",false);
+    	$("#mybutton").attr("disabled",false);
     }
 });
 
@@ -91,7 +91,24 @@ function addOption(node, element) {
 
 
 function goSubmit() {
-    $("#registererform").submit();
+	var email = $("#regemail").val();
+	var username = $("#username").val();
+	var password = $("#password").val();
+	var tel = $("#tel").val();
+	var province= $("#province").find("option:selected").text();
+	var city = $("#city").find("option:selected").text();
+	var district = $("#district").find("option:selected").text();
+	
+	$.post("/wowo/userServlet",{op:"regUser",email:email, username:username, password:password, tel:tel, province:province,
+		city:city,district:district},function(data){
+			data = parseInt($.trim(data));
+			if(data>0){
+				alert("注册成功！");
+				location.href="/wowo/regok.html";
+			}else{
+				alert("注册失败，请验证")
+			}
+		});
 }
 
 function checkInfo() {
@@ -118,7 +135,7 @@ function checkInfo() {
             var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
             var tdInfo = "";
-
+            
             if (val == "") {
                 tdInfo = "请输入邮箱";
             } else if (!reg.test(val)) {
@@ -140,7 +157,16 @@ function checkInfo() {
             var reg = /^[a-zA-Z\u4e00\u9fa5][a-zA-Z0-9_\u4e00\u9fa5]{2,17}$/;
 
             var tdInfo = "";
-
+            
+            $.post("/wowo/userServlet",{op:"testUsername", uname:val},function(data){
+            	data = parseInt(data);
+            	if(data == 1){
+            		tdInfo =  "该用户已经注册";
+            	}else{
+            		tdInfo = "";
+            	}
+            });
+            
             if (val == "") {
                 tdInfo = "请输入用户名";
             } else if (!reg.test(val)) {
@@ -222,6 +248,21 @@ function checkInfo() {
         }
     });
     
+    $("#regsafecode").bind({
+    	blur:function() {
+    		var val = $("#regsafecode").val();
+    		$.post("/wowo/userServlet",{op:"testCode", code:val},function(data){
+    			data = parseInt(data);
+    			if(data == 1){
+    				$("#myspan").val("验证码错误")
+    				alert("验证码错误");
+    			}else{
+    				$("#myspan").val("验证码正确")
+    				$("#mybutton").attr("disabled",false);
+    			}
+    		});
+    	}
+    });
 }
 var time = 60;
 var timer;
