@@ -27,8 +27,42 @@ public class GoodsTypeServlet extends BasicServlet {
 		String op = request.getParameter("op");
 		if("findGoodsTypeByPage".equals(op)){
 			findGoodsTypeByPage(request,response);
+		}else if("addGoodsType".equals(op)){
+			addGoodsType(request,response);
+		}else if("updateGoodsType".equals(op)){
+			updateGoodsType(request,response);
 		}
 		
+	}
+	
+	/**
+	 * 修改商品类型
+	 * @param request
+	 * @param response
+	 */
+	private void updateGoodsType(HttpServletRequest request,
+			HttpServletResponse response) {
+		String tid = request.getParameter("tid");
+		String tname = request.getParameter("tname");
+		String des  = request.getParameter("des");
+		
+		IGoodsTypeBiz gtb = new GoodsTypeBizImpl();
+		int result = gtb.update(Integer.parseInt(tid), tname, des);
+		this.out(response, result);
+	}
+
+	/**
+	 * 添加商品类型
+	 * @param request
+	 * @param response
+	 */
+	private void addGoodsType(HttpServletRequest request,
+			HttpServletResponse response) {
+		String tname = request.getParameter("tname");
+		String des = request.getParameter("des");
+		IGoodsTypeBiz gtb = new GoodsTypeBizImpl();
+		int result  = gtb.add(tname, des);
+		this.out(response, result);
 	}
 
 	/**

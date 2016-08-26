@@ -2,7 +2,7 @@
 <script type="text/javascript">
     var editRow = undefined;
     var flag;
-    var statusObj = [{sid : 1, statusStr : '正常'}, {sid : 0, statusStr : '已禁用' }];
+    var statusObj = [{sid : 1, statusStr : '正常'}, {sid : 0, statusStr : '禁用' }];
     var datagrid = $(".roles_dataInfo").datagrid({   
         url : '../../rolesServlet',
         queryParams : {op : "findRolesByPage"},
@@ -24,14 +24,7 @@
             {field: 'rname', title: '角色名', width: 100, align: 'center', editor: { type : "text", options : {required : true} }},   
             {field: 'mark', title: '角色描述', width: 100, align: 'center', editor: { type : "text" } },   
             {
-            	field:'status', title:'角色状态', width:100, align:'center', editor: {
-                    type: "combobox", options:{
-                        required : true,
-                        valueField : 'sid',
-                        textField : 'statusStr',
-                        data : statusObj
-                    }
-            	},    
+            	field:'status', title:'角色状态', width:100, align:'center', 
             	formatter: function(value, row, index) {//格式化单元格函数，有3个参数：value：字段的值。rowData：行数据。rowIndex：行索引。 
                        for (var i = 0; i < statusObj.length; i++) {
                            if ( statusObj[i].sid == value ) {
@@ -88,6 +81,7 @@
                  }
                }
 		},'-',{
+			
                iconCls: 'icon-remove',
                text:"删除",
                handler: function(){
@@ -124,7 +118,7 @@
                text:"保存",
                handler: function(){//当用户选择保存时
             	   var rows = datagrid.datagrid("getChanges")[0]; //获取当期正在被编辑的行
-            	   if(rows.rname==null||rows.rname==""||rows.mark==null||rows.mark==""||rows.status==""||rows.status==null){
+            	   if(rows.rname==null||rows.rname==""||rows.mark==null||rows.mark==""){
                 	   $.messager.show({title: '温馨提示', msg: '请输入完整的数据', timeout: 2000, showType: 'slide'});
                    }
                    datagrid.datagrid("endEdit", editRow);//结束编辑
@@ -156,7 +150,13 @@
 		},'-',{
                iconCls: 'icon-undo',
                text:"撤销",
-               handler: function(){}
+               handler: function(){
+            	   if(editRow != undefined ){//说明当前有正在编辑的行
+                       datagrid.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
+                       datagrid.datagrid("endEdit", editRow);//结束正在被编辑的行
+                       editRow = undefined;
+                   }
+               }
         }]
     });
 </script>

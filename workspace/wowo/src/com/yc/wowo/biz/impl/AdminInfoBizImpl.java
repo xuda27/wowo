@@ -123,7 +123,7 @@ public class AdminInfoBizImpl implements IAdminInfoBiz{
 	@Override
 	public Integer del(String aid) {
 		if(aid==null || "".equals(aid)){
-			return null;
+			return -1;
 		}
 		IAdminInfoDao adminInfoDao=new AdminInfoDaoImpl();
 		return adminInfoDao.del(aid);

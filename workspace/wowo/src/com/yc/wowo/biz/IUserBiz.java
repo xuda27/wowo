@@ -1,6 +1,7 @@
 package com.yc.wowo.biz;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yc.wowo.entities.UserInfo;
 
@@ -34,4 +35,6 @@ public interface IUserBiz {
 	 * @return
 	 */
 	public List<UserInfo> find(Integer pageNo, Integer pageSize);
+	
+	public List<UserInfo> find(Map<String,String> map, Integer pageNo, Integer pageSize);
 }

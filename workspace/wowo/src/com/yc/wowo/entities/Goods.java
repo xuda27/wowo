@@ -7,10 +7,9 @@ public class Goods implements Serializable{
 	private Integer gid;
 	private String gname;
 	private String des;
-	private double price;
-	private String tid;
+	private Integer price;
+	private Integer tid;
 	private String pic;
-	private Integer status;
 	private Integer spid;
 	
 	private String sname;
@@ -18,14 +17,6 @@ public class Goods implements Serializable{
 	private String flag;
 	private String mark;
 	private String temp;
-	@Override
-	public String toString() {
-		return "Goods [gid=" + gid + ", gname=" + gname + ", des=" + des
-				+ ", price=" + price + ", tid=" + tid + ", pic=" + pic
-				+ ", status=" + status + ", spid=" + spid + ", sname=" + sname
-				+ ", aname=" + aname + ", flag=" + flag + ", mark=" + mark
-				+ ", temp=" + temp + "]";
-	}
 	public Integer getGid() {
 		return gid;
 	}
@@ -47,13 +38,13 @@ public class Goods implements Serializable{
 	public double getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
-	public String getTid() {
+	public int getTid() {
 		return tid;
 	}
-	public void setTid(String tid) {
+	public void setTid(int tid) {
 		this.tid = tid;
 	}
 	public String getPic() {
@@ -61,12 +52,6 @@ public class Goods implements Serializable{
 	}
 	public void setPic(String pic) {
 		this.pic = pic;
-	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
 	}
 	public Integer getSpid() {
 		return spid;
@@ -104,105 +89,19 @@ public class Goods implements Serializable{
 	public void setTemp(String temp) {
 		this.temp = temp;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((aname == null) ? 0 : aname.hashCode());
-		result = prime * result + ((des == null) ? 0 : des.hashCode());
-		result = prime * result + ((flag == null) ? 0 : flag.hashCode());
-		result = prime * result + ((gid == null) ? 0 : gid.hashCode());
-		result = prime * result + ((gname == null) ? 0 : gname.hashCode());
-		result = prime * result + ((mark == null) ? 0 : mark.hashCode());
-		result = prime * result + ((pic == null) ? 0 : pic.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(price);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((sname == null) ? 0 : sname.hashCode());
-		result = prime * result + ((spid == null) ? 0 : spid.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
-		result = prime * result
-				+ ((this.temp == null) ? 0 : this.temp.hashCode());
-		result = prime * result + ((tid == null) ? 0 : tid.hashCode());
-		return result;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Goods other = (Goods) obj;
-		if (aname == null) {
-			if (other.aname != null)
-				return false;
-		} else if (!aname.equals(other.aname))
-			return false;
-		if (des == null) {
-			if (other.des != null)
-				return false;
-		} else if (!des.equals(other.des))
-			return false;
-		if (flag == null) {
-			if (other.flag != null)
-				return false;
-		} else if (!flag.equals(other.flag))
-			return false;
-		if (gid == null) {
-			if (other.gid != null)
-				return false;
-		} else if (!gid.equals(other.gid))
-			return false;
-		if (gname == null) {
-			if (other.gname != null)
-				return false;
-		} else if (!gname.equals(other.gname))
-			return false;
-		if (mark == null) {
-			if (other.mark != null)
-				return false;
-		} else if (!mark.equals(other.mark))
-			return false;
-		if (pic == null) {
-			if (other.pic != null)
-				return false;
-		} else if (!pic.equals(other.pic))
-			return false;
-		if (Double.doubleToLongBits(price) != Double
-				.doubleToLongBits(other.price))
-			return false;
-		if (sname == null) {
-			if (other.sname != null)
-				return false;
-		} else if (!sname.equals(other.sname))
-			return false;
-		if (spid == null) {
-			if (other.spid != null)
-				return false;
-		} else if (!spid.equals(other.spid))
-			return false;
-		if (status == null) {
-			if (other.status != null)
-				return false;
-		} else if (!status.equals(other.status))
-			return false;
-		if (temp == null) {
-			if (other.temp != null)
-				return false;
-		} else if (!temp.equals(other.temp))
-			return false;
-		if (tid == null) {
-			if (other.tid != null)
-				return false;
-		} else if (!tid.equals(other.tid))
-			return false;
-		return true;
+	public String toString() {
+		return "Goods [gid=" + gid + ", gname=" + gname + ", des=" + des
+				+ ", price=" + price + ", tid=" + tid + ", pic=" + pic
+				+ ", spid=" + spid + ", sname=" + sname + ", aname=" + aname
+				+ ", flag=" + flag + ", mark=" + mark + ", temp=" + temp + "]";
 	}
-	public Goods(Integer gid, String gname, String des, double price,
-			String tid, String pic, Integer status, Integer spid, String sname,
-			String aname, String flag, String mark, String temp) {
+	public Goods(Integer gid, String gname, String des, int price,
+			int tid, String pic, Integer spid, String sname, String aname,
+			String flag, String mark, String temp) {
 		super();
 		this.gid = gid;
 		this.gname = gname;
@@ -210,7 +109,6 @@ public class Goods implements Serializable{
 		this.price = price;
 		this.tid = tid;
 		this.pic = pic;
-		this.status = status;
 		this.spid = spid;
 		this.sname = sname;
 		this.aname = aname;
@@ -221,6 +119,7 @@ public class Goods implements Serializable{
 	public Goods() {
 		super();
 	}
+	
 	
 	
 	

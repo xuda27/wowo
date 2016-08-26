@@ -1,6 +1,7 @@
 package com.yc.wowo.biz.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yc.wowo.biz.IUserBiz;
 import com.yc.wowo.dao.IUserInfo;
@@ -31,6 +32,12 @@ public class UserBizImpl implements IUserBiz {
 			pageSize = 1;
 		}
 		return userDao.find(pageNo, pageSize);
+	}
+
+	@Override
+	public List<UserInfo> find(Map<String, String> map, Integer pageNo,
+			Integer pageSize) {
+		return userDao.find(map, pageNo, pageSize);
 	}
 
 }

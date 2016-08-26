@@ -96,11 +96,18 @@ public class AdminInfoServlet extends BasicServlet{
 		String pageNo = request.getParameter("page");
 		String pageSize = request.getParameter("rows");
 		
-		Map<String,String> map = new HashMap<String, String>();
-		map.put("rid=", rid);
-		map.put(" aname like ", "%"+aname+"%");
-		map.put("status=", status);
 		
+		
+		Map<String,String> map = new HashMap<String, String>();
+		if(!"-1".equals(rid.trim())){
+			map.put("rid=", rid);
+		}
+		if(aname!=null && !aname.equals("")){
+			map.put(" aname like ", "%"+aname+"%");
+		}
+		if(!"-1".equals(status.trim())){
+			map.put("status=", status);
+		}
 		IAdminInfoBiz ab = new AdminInfoBizImpl();
 		List<AdminInfo> list =  ab.find(map, Integer.parseInt(pageNo), Integer.parseInt(pageSize));
 		List<AdminInfo> list1 = ab.find(map, null, null);
@@ -152,7 +159,7 @@ public class AdminInfoServlet extends BasicServlet{
 	}
 
 	/**
-	 * 分页查询管理员信息
+	 * 分页查询管理员信息 查询除了冻结
 	 * @param request
 	 * @param response
 	 */

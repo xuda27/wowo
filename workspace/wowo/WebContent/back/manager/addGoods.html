@@ -1,0 +1,105 @@
+<script src="../../js/showPic.js">
+</script>
+<style>
+	.add_goods>ul>li {
+		list-style-type:none;
+		margin-top:20px;
+	}
+	
+	.add_goods>ul>li>span {
+		display:inline-block;
+		width:120px;
+		text-align:right;
+		margin-right:10px;
+	}
+	
+	.add_goods>ul>li>input, .add_goods>ul>li>select {
+		width:200px;
+		border:1px soild #6198CD;
+	}
+</style>
+ 
+<div class="add_goods">
+	<ul>
+		<li>
+			<span>商品名称:</span> 
+			<input type="text" name="gname" id="gname" placeholder="请输入商品名称..." required="required">
+		</li>
+		<li>
+			<span>商品类型：</span>
+			<select name="tname" id="tname" required="required">
+			
+			</select>
+		</li>
+		<li>
+			<span>所属店铺:</span> 
+			<select name="sname" id="sname" required="required">
+				
+			</select>
+		</li>
+		<li>
+			<span>商品价格：</span>
+			<input type="number" name="price" id="price" placeholder="请输入商品价格..." required="required">
+		</li>
+		<li>
+			<span>描述</span>
+			<input type="text" name="des" id="des" >
+		</li>
+		<li>
+			<span>图片</span>
+			<input type="file" name="myimg" id="myimg" onchange="setImagePreviews(this,'proview')">
+		</li>
+		<li>
+			<span>商品图片预览</span>
+			<div id="proview" height="150px" width="150px"></div>
+		</li>
+		<a href="javascript:addGoods()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+	</ul>
+</div>
+
+<script>
+	
+	$(function (){
+		$.post("../../goodsServlet",{op:"selectTname"},function(data){
+			var str = "";
+			$.each(data,function(index,item){
+				str+="<option id ='"+item.tid+"' value='"+item.tid+"'>"+item.tname+"</option>";
+			});
+			$("#tname").html("").append($(str));
+		},"json");
+		
+		$.post("../../goodsServlet",{op:"selectSname"},function(data){
+			var str = "";
+			$.each(data,function(index,item){
+				str+="<option id ='"+item.spid+"' value='"+item.spid+"'>"+item.sname+"</option>";
+			});
+			$("#sname").html("").append($(str));
+		},"json");
+	});
+	
+	function addGoods() {
+		var gname = $("#gname").val();
+		var tname = $("#tname").val();
+		var sname = $("#sname").val();
+		var price= $("#price").val();
+		var des = $("#des").val();
+		var photo = $("#myimg").val();
+		$.post("../../goodsServlet",
+				{op:"addGoods",gname:gname,tname:tname,sname:sname,price:price,des:des,pic:photo},
+				function(data){
+					data = parseInt($.trim(data));
+					if(data > 0){
+						$("#gname").val("");
+						$("#tname").val("");
+						$("#sname").val("");
+						$("#price").val("");
+						$("#des").val("");
+						$("#myimg").val("");
+						$.messager.show({title: '成功', msg: '添加成功', timeout: 2000, showType: 'slide'});
+					}else{
+						$.messager.alert({title: '失败', msg: '添加失败', timeout: 2000, showType: 'slide'});
+					}
+		});
+	}
+</script>
+

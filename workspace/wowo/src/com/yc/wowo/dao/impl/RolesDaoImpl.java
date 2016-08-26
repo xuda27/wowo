@@ -44,9 +44,9 @@ public class RolesDaoImpl implements IRolesDao {
 		List<Object> params = new ArrayList<Object>();
 		String sql = null;
 		if(rid != null && rid.contains(",") && !rid.contains(" or")){
-			sql = "delete from roles where rid in(" + rid + ")";
+			sql = "update roles set status=0 where rid in(" + rid + ")";
 		}else{
-			sql = "delete from roles where rid = ?";
+			sql = "update roles set status=0 where rid = ?";
 			params.add(rid);
 		}
 		return db.doUpdate(sql, params);

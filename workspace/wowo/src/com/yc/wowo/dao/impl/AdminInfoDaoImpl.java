@@ -16,9 +16,9 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		DBHelper db=new DBHelper();
 		String sql=null;
 		if(name.contains("@")){  //说明是登录邮箱
-			sql="select * from adminInfos where email=? and pwd=? and status=2 and rid=?";
+			sql="select * from adminInfos where email=? and pwd=? and status=2 and rid=? ";
 		}else{
-			sql="select * from adminInfos where aname=? and pwd=? and status=2 and rid=?";
+			sql="select * from adminInfos where aname=? and pwd=? and status=2 and rid=? ";
 		}
 		List<Object> params = new ArrayList<Object>();
 		params.add(name);
@@ -37,18 +37,19 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		return db.findByOne("select * from adminInfos where aid=?", params, AdminInfo.class);
 	}
 
+	
 	@Override
 	public List<AdminInfo> find(Integer pageNo, Integer pageSize) {
 		DBHelper db=new DBHelper();
 		List<Object> params = new ArrayList<Object>();
 		String sql=null;
 		if(pageNo==null){
-			sql="select * from adminInfos order by aid desc";
+			sql="select * from adminInfos where status !=3 order by aid desc";
 		}else{
 			params.add(pageNo*pageSize);
 			params.add((pageNo-1)*pageSize);
 			sql="select * from(select a.*,rownum rn from("
-					+ "select * from adminInfos order by aid desc )a where rownum<=? ) where rn>?";
+					+ "select * from adminInfos where status !=3 order by aid desc )a where rownum<=? ) where rn>?";
 		}
 		return db.find(sql, params,AdminInfo.class);
 	}
@@ -187,6 +188,9 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 		return db.doUpdate(sql, params);
 	}
 
+	/**
+	 * 冻结
+	 */
 	@Override
 	public Integer del(String aid) {
 		DBHelper db=new DBHelper();
@@ -248,7 +252,6 @@ public class AdminInfoDaoImpl implements IAdminInfoDao{
 			param.add(pageNo*pageSize);
 			param.add((pageNo-1)*pageSize);
 		}
-		System.out.println(sql);
 		return db.find(sql, param, AdminInfo.class);
 	}
 

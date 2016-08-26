@@ -22,7 +22,7 @@
     var statusObj = [{status : 1, statusStr : '正常'}, {status : 0, statusStr : '已禁用' }];
     var datagrid = $(".shop_dataInfo").datagrid({   
         url : '../../shopServlet',
-        queryParams : {op : "findShopByPage"},
+        queryParams : {op : "findShopsByPage"},
         loadMsg : "数据加载中",// 当从远程站点载入数据时，显示的一条快捷信息。  
         fitColumns : true,//设置为true将自动使列适应表格宽度以防止出现水平滚动。
         striped: true,
@@ -40,7 +40,7 @@
             {field: 'spid', title: '店铺编号', width: 100, align: 'center', sortable: true},         
             {field: 'sname', title: '店铺名称', width: 100, align: 'center', sortable: true},   
             {field: 'aname', title: '店铺所有人', width: 100, align: 'center', editor: { type : "text", options : {required : true} }},
-            {field: 'aname', title: '店铺类型', width: 100, align: 'center'},
+            {field: 'tname', title: '店铺类型', width: 100, align: 'center'},
             {field: 'address', title: '地址', width: 100, align: 'center', editor: { type : "text" } }, 
             {field: 'info', title: '店铺信息', width: 100, align: 'center'},
             {

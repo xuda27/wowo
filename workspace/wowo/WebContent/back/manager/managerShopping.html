@@ -1,3 +1,4 @@
+
 <style>
 	.add_shopping_info>ul>li {
 		list-style-type:none;
@@ -25,27 +26,33 @@
 		</li>
 		<li>
 			<span>店铺名称:</span> 
-			<input type="text" name="manager_shopping_sname" id="manager_shopping_sname" placeholder="请输入您的店铺名称..." required="required">
+			<input type="text" name="manager_shopping_sname" id="manager_shopping_sname" placeholder="请输入店铺名称..." required="required">
+		</li>
+		<li>
+			<span>店铺所有人:</span> 
+			<select name="manager_shopping_aname" id="manager_shopping_aname" required="required">
+				
+			</select>
 		</li>
 		<li>
 			<span>店铺类型:</span> 
-			<select name="manager_shopping_tid" id="manager_shopping_tid">
-			
+			<select name="manager_shopping_tid" id="manager_shopping_tid" required="required">
+				
 			</select>
 		</li>
 		<li>
 			<span>省份:</span>
-			<select name="manager_shopping_prov" id="manager_shopping_prov">
+			<select name="manager_shopping_prov" id="manager_shopping_prov" required="required">
 				<option value="-1">--请选择省份--</option>
 			</select>&nbsp;&nbsp;
 			
 			<span>城市:</span>
-			<select name="manager_shopping_city" id="manager_shopping_city">
+			<select name="manager_shopping_city" id="manager_shopping_city" required="required">
 				<option value="-1">--请选择城市--</option>
 			</select>&nbsp;&nbsp;
 			
 			<span>地区:</span>
-			<select name="manager_shopping_area" id="manager_shopping_area">
+			<select name="manager_shopping_area" id="manager_shopping_area" required="required">
 				<option value="-1">--请选择地区--</option>
 			</select> 
 		</li>
@@ -53,17 +60,16 @@
 		<li>
 			<span>详细地址:</span> 
 			<input type="text" id="manager_shopping_addr"
-			name="manager_shopping_addr" placeholder="请输入您的详细地址" required="required">
+			name="manager_shopping_addr" placeholder="请输入详细地址" required="required">
 		</li>
 		
 		<li>
 			<span>联系方式:</span>
-		 	<input type="text" id="manager_shopping_tel" name="manager_shopping_tel" placeholder="请填写您的联系方式..." required="required">
+		 	<input type="text" id="manager_shopping_tel" name="manager_shopping_tel" placeholder="请填写店铺联系方式..." required="required">
 		</li>
-
 		<li>
 			<span>店铺信息:</span>
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+			<a href="javascript:addShop()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
 			<div>
 				<script id="editor" type="text/plain" style= "width:900px;height:300px;">
 				</script>
@@ -72,8 +78,60 @@
 	</ul>
 </div>
 
+<script type="text/javascript" src="../js/city.js"></script>
 <script>
-	//
-	UE.getEditor('editor');
+	var ue= UE.getEditor('editor');
+	
+	$(function (){
+		$.post("../../shopServlet",{op:"selectTname"},function(data){
+			var str = "";
+			$.each(data,function(index,item){
+				str+="<option id ='"+item.tid+"' value='"+item.tid+"'>"+item.tname+"</option>";
+			});
+			$("#manager_shopping_tid").html("").append($(str));
+		},"json");
+		
+		$.post("../../shopServlet",{op:"selectAname"},function(data){
+			var str = "";
+			$.each(data,function(index,item){
+				str+="<option id ='"+item.aid+"' value='"+item.aid+"'>"+item.aname+"</option>";
+			});
+			$("#manager_shopping_aname").html("").append($(str));
+		},"json");
+	});
+	
+	function addShop() {
+		var sname = $("#manager_shopping_sname").val();
+		var aid = $("#manager_shopping_aname").val();
+		var tid = $("#manager_shopping_tid").val();
+		var prov= $("#manager_shopping_prov").find("option:selected").text();
+		var city = $("#manager_shopping_city").find("option:selected").text();
+		var area = $("#manager_shopping_area").find("option:selected").text();
+		var addr = $("#manager_shopping_addr").val();
+		var tel = $("#manager_shopping_tel").val();
+		var text = ue.getContent();
+		if(text=="" || text==null){
+			text  = "";
+		}
+		$.post("../../shopServlet",
+				{op:"addShop",sname:sname,aid:aid,tid:tid,prov:prov,city:city,area:area,addr:addr,tel:tel,text:text},
+				function(data){
+					data = parseInt($.trim(data));
+					if(data > 0){
+						$("#manager_shopping_sname").val("");
+						$("#manager_shopping_aname").val("");
+						$("#manager_shopping_tid").val("");
+						$("#manager_shopping_prov").val("");
+						$("#manager_shopping_city").val("");
+						$("#manager_shopping_area").val("");
+						$("#manager_shopping_addr").val("");
+						$("#manager_shopping_tel").val("");
+						ue.setContent("");
+						$.messager.show({title: '成功', msg: '添加成功', timeout: 2000, showType: 'slide'});
+					}else{
+						$.messager.alert({title: '失败', msg: '添加失败', timeout: 2000, showType: 'slide'});
+					}
+		});
+	}
 </script>
 

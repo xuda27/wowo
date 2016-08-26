@@ -1,7 +1,9 @@
 package com.yc.wowo.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,6 +37,8 @@ public class UserServlet extends BasicServlet {
 			testUsername(request,response);
 		}else if("testCode".equals(op)){
 			testCode(request,response);
+		}else if("searchUser".equals(op)){
+			searchUser(request,response);
 		}
 		
 		
@@ -42,6 +46,42 @@ public class UserServlet extends BasicServlet {
 	}
 	
 
+	/**
+	 * 模糊条件查询
+	 * @param request
+	 * @param response
+	 */
+	private void searchUser(HttpServletRequest request,
+			HttpServletResponse response) {
+		String province  = request.getParameter("province");
+		String city = request.getParameter("city");
+		String area = request.getParameter("area");
+		String uname= request.getParameter("uname");
+		String status = request.getParameter("status");
+		String pageNo = request.getParameter("page");
+		String pageSize = request.getParameter("rows");
+		
+		Map<String,String> map = new HashMap<String, String>();
+		if(!"".equals(province.trim()) && province!=null && !"所有".equals(province.trim()) && !"--请选择省份--".equals(province.trim())){
+			map.put("prov=", province);
+		}
+		if(!"".equals(city.trim()) && city!=null && !"所有".equals(city.trim()) && !"--请选择城市--".equals(city.trim())){
+			map.put("city=", city);
+		}
+		if(!"".equals(area.trim()) && area!=null && !"所有".equals(area.trim()) && !"--请选择地区--".equals(area.trim())){
+			map.put("area=", area);
+		}
+		if(!"".equals(uname.trim()) && uname!=null){
+			map.put("uname like", "%"+uname+"%");
+		}
+		if(!"".equals(status.trim()) && status!=null && !"-1".equals(status.trim())){
+			map.put("status=", status);
+		}
+		IUserBiz ub = new UserBizImpl();
+		List<UserInfo> list = ub.find(map, Integer.parseInt(pageNo.trim()), Integer.parseInt(pageSize.trim()));
+		int total = ub.find(map, null, null).size();
+		this.out(response, list, total);
+	}
 
 	/**
 	 * 前台注册会员

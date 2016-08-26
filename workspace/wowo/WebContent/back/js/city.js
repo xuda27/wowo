@@ -66,7 +66,6 @@ $(function() {
             }
         }
     }
-
 });
 
 function addOption(node, element) {

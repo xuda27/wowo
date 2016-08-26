@@ -3,7 +3,6 @@
 <script type="text/javascript">
     var editRow = undefined;
     var flag;
-    var statusObj = [{status : 1, statusStr : '正常'}, {status : 0, statusStr : '冻结' }];
     var datagrid = $(".goods_dataInfo").datagrid({   
         url : '../../goodsServlet',
         queryParams : {op : "findGoodsByPage"},
@@ -28,25 +27,6 @@
             {field: 'tid', title: '商品类型', width: 100, align: 'center', sortable: true},
             {field: 'spid', title: '商家编号', width: 100, align: 'center', sortable: true},
             {field: 'des', title: '商品描述', width: 100, align: 'center', editor: { type : "text", options : {required : true} }},
-            {
-                field:'status', title:'商品状态', width:100, align:'center', editor: {
-                    type: "combobox", options:{
-                        required : true,
-                        valueField : 'gid',
-                        textField : 'statusStr',
-                        data : statusObj
-                    }
-                },    
-                formatter: function(value, row, index) {//格式化单元格函数，有3个参数：value：字段的值。rowData：行数据。rowIndex：行索引。 
-                       for (var i = 0; i < statusObj.length; i++) {
-                           if ( statusObj[i].status == value ) {
-                              return statusObj[i].statusStr;
-                           }
-                           return value;
-                       }
-                }
-                
-            }   
         ]], //数据表格的列是一个对象数组  
         
         toolbar: [{//通过数组定义工具栏:
@@ -54,7 +34,7 @@
             text:"添加",
             handler: function(){//用户选择编辑时
                 flag = "添加";
-                op = "addgoods";
+                op = "addGoods";
                 if(editRow != undefined ){//说明当前有正在编辑的行
                     datagrid.datagrid("rejectChanges");//回滚自创建以来或自上次调用AcceptChanges，所有的变化数据。
                     datagrid.datagrid("endEdit", editRow);//结束正在被编辑的行
@@ -129,7 +109,7 @@
                text:"保存",
                handler: function(){//当用户选择保存时
                    var rows = datagrid.datagrid("getChanges")[0]; //获取当期正在被编辑的行
-                   if(rows.uname==null||rows.pwd==""||rows.tel==null||rows.address==""||rows.status==""||rows.status==null){
+                   if(rows.uname==null||rows.pwd==""||rows.tel==null||rows.address==""){
                        $.messager.show({title: '温馨提示', msg: '请输入完整的数据', timeout: 2000, showType: 'slide'});
                    }
                    datagrid.datagrid("endEdit", editRow);//结束编辑

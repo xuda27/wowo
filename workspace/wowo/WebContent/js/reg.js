@@ -1,3 +1,4 @@
+var f =[];
 function createXmlDom() {
     var xmlDom = null;
 
@@ -73,13 +74,6 @@ $(function() {
     });
 
     checkInfo();
-    $("#mybutton").attr("disabled","disabled");
-    var box = document.getElementById("argee");
-    if(box.checked == false){
-    	$("#mybutton").attr("disabled","disabled");
-    }else{
-    	$("#mybutton").attr("disabled",false);
-    }
 });
 
 function addOption(node, element) {
@@ -91,6 +85,13 @@ function addOption(node, element) {
 
 
 function goSubmit() {
+	for(var i=0;i<f.length;i++){
+		if(f[i]==0){
+			return false;
+			alert("注册失败，请核对注册信息")
+		}
+	}
+	
 	var email = $("#regemail").val();
 	var username = $("#username").val();
 	var password = $("#password").val();
@@ -127,7 +128,11 @@ function checkInfo() {
 
     $("#regemail_msg").css("color", "red");
     $("#regemail_msg").css("font-size", "14px");
-
+    
+    $("#regsafecode_msg").css("color", "red");
+    $("#regsafecode_msg").css("font-size", "14px");
+    
+    
 
     $("#regemail").bind({
         blur: function() {
@@ -138,10 +143,13 @@ function checkInfo() {
             
             if (val == "") {
                 tdInfo = "请输入邮箱";
+                f[0]=0;
             } else if (!reg.test(val)) {
                 tdInfo = "请输入正确的邮箱";
-            } else {
+                f[0]=0;
+            } else if(reg.test(val)){
                 tdInfo = "";
+                f[0]=1;
             }
 
             $("#regemail_msg").text(tdInfo);
@@ -154,7 +162,7 @@ function checkInfo() {
     $("#username").bind({
         blur: function() {
             var val = $("#username").val();
-            var reg = /^[a-zA-Z\u4e00\u9fa5][a-zA-Z0-9_\u4e00\u9fa5]{2,17}$/;
+            var reg = /^[a-zA-Z0-9_\u4e00\u9fa5]{2,17}$/;
 
             var tdInfo = "";
             
@@ -162,6 +170,7 @@ function checkInfo() {
             	data = parseInt(data);
             	if(data == 1){
             		tdInfo =  "该用户已经注册";
+            		f[1]=0;
             	}else{
             		tdInfo = "";
             	}
@@ -169,10 +178,13 @@ function checkInfo() {
             
             if (val == "") {
                 tdInfo = "请输入用户名";
+                f[1]=0;
             } else if (!reg.test(val)) {
                 tdInfo = "请输入正确的用户名";
+                f[1]=0;
             } else {
                 tdInfo = "";
+                f[0]=0;
             }
 
             $("#username_msg").text(tdInfo);
@@ -192,10 +204,13 @@ function checkInfo() {
 
             if (val == "") {
                 tdInfo = "请输入密码";
+                f[2]=0;
             } else if (!reg.test(val)) {
                 tdInfo = "请输入正确的密码";
+                f[2]=0;
             } else {
                 tdInfo = "";
+                f[2]=1;
             }
 
             $("#password_msg").text(tdInfo);
@@ -213,10 +228,13 @@ function checkInfo() {
 
             if (reval == "") {
                 tdInfo = "请输入密码";
+                f[3]=0;
             } else if (val != reval) {
                 tdInfo = "请确认密码";
+                f[3]=0;
             } else {
                 tdInfo = "";
+                f[3]=1;
             }
 
             $("#reppassword_msg").text(tdInfo);
@@ -235,10 +253,13 @@ function checkInfo() {
 
             if (val == "") {
                 tdInfo = "请输入联系电话";
+                f[4]=0;
             } else if (!reg.test(val)) {
                 tdInfo = "请输入正确的联系电话";
+                f[4]=0;
             } else {
                 tdInfo = "";
+                f[4]=1;
             }
 
             $("#tel_msg").text(tdInfo);
@@ -250,22 +271,25 @@ function checkInfo() {
     
     $("#regsafecode").bind({
     	blur:function() {
+    		var tdInfo = "";
     		var val = $("#regsafecode").val();
     		$.post("/wowo/userServlet",{op:"testCode", code:val},function(data){
     			data = parseInt(data);
     			if(data == 1){
-    				$("#myspan").val("验证码错误")
-    				alert("验证码错误");
+    				f[5]=0;
+    				$("#regsafecode_msg").css("color", "red");
+    				tdInfo = "验证码错误";
     			}else{
-    				$("#myspan").val("验证码正确")
-    				$("#mybutton").attr("disabled",false);
+    				f[5]=0;
+    				$("#regsafecode_msg").css("color", "green");
+    				tdInfo = "验证码正确";
     			}
     		});
+    		$("#regsafecode_msg").text(tdInfo);
     	}
     });
 }
 var time = 60;
-var timer;
 
 function sendCode(){
 	var mail = $("#regemail").val();
@@ -274,7 +298,8 @@ function sendCode(){
 	$.post("sendMailServlet", {uname:uname, mail:mail}, function(data){
 		data=parseInt($.trim(data));
 		if(data == 1){
-			timer = setInterval("changeNum()", 1000);
+			changeNum();
+			alert("邮件发送成功");
 		}else{
 			alert("邮件发送失败，请检查邮箱是否正确");
 			$("#mycodebtn").attr("disabled", false);
@@ -286,30 +311,32 @@ function changeNum(){
 	time--;
 	if(time<=0){
 		$("#mycodebtn").val("获取验证码").attr("disabled",false);
-		window.clearInterval(timer);
+		window.clearTimeout(timer);
+		time =60;
+		return;
 	}else{
-		time = 60;
 		$("#mycodebtn").val("点击再去获取("+time+"s)");
 	}
+	var timer = setTimeout("changeNum()", 1000);
 }
 
 function judgePwd(){
 	var val = $("#password").val();
     if(val.length>0 && val.length<=7){
-    	$(".ucr-stronger.clearfix li:eq(0)").css("color","yellow");
-    	$(".ucr-stronger.clearfix li:eq(1)").css("color","white");
-    	$(".ucr-stronger.clearfix li:eq(2)").css("color","white");
+    	$(".ucr-stronger.clearfix li:eq(0)").css("background-color","red");
+    	$(".ucr-stronger.clearfix li:eq(1)").css("background-color","white");
+    	$(".ucr-stronger.clearfix li:eq(2)").css("background-color","white");
     }else if(val.length>7 && val.length<=12){
-    	$(".ucr-stronger.clearfix li:eq(0)").css("color","white");
-    	$(".ucr-stronger.clearfix li:eq(1)").css("color","yellow");
-    	$(".ucr-stronger.clearfix li:eq(2)").css("color","white");
+    	$(".ucr-stronger.clearfix li:eq(0)").css("background-color","white");
+    	$(".ucr-stronger.clearfix li:eq(1)").css("background-color","blue");
+    	$(".ucr-stronger.clearfix li:eq(2)").css("background-color","white");
     }else if(val.length>12){
-    	$(".ucr-stronger.clearfix li:eq(0)").css("color","white");
-    	$(".ucr-stronger.clearfix li:eq(1)").css("color","white");
-    	$(".ucr-stronger.clearfix li:eq(2)").css("color","yellow");
+    	$(".ucr-stronger.clearfix li:eq(0)").css("background-color","white");
+    	$(".ucr-stronger.clearfix li:eq(1)").css("background-color","white");
+    	$(".ucr-stronger.clearfix li:eq(2)").css("background-color","green");
     }else{
-    	$(".ucr-stronger.clearfix li:eq(0)").css("color","white");
-    	$(".ucr-stronger.clearfix li:eq(1)").css("color","white");
-    	$(".ucr-stronger.clearfix li:eq(2)").css("color","white");
+    	$(".ucr-stronger.clearfix li:eq(0)").css("background-color","white");
+    	$(".ucr-stronger.clearfix li:eq(1)").css("background-color","white");
+    	$(".ucr-stronger.clearfix li:eq(2)").css("background-color","white");
     }
 }

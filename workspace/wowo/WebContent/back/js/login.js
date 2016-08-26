@@ -208,7 +208,6 @@ function blurTel() {
     var obj = $("#tel").val();
     var label = $("#label-tel");
     var reg = /^1[3|4|5|7|8]\d{9}$/;
-
     if ( reg.test(obj) ) {
         label.css("color", "blue");
         label.text("符合手机号格式");

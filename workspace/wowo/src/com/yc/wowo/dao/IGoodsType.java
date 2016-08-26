@@ -20,4 +20,8 @@ public interface IGoodsType {
 	public List<GoodsType> find(Integer pageNo, Integer pageSize);
 	
 	public List<GoodsType> find();
+	
+	public Integer add(String tname, String des);
+	
+	public Integer update(Integer tid, String tname, String des);
 }

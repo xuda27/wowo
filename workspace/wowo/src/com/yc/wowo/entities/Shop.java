@@ -17,141 +17,124 @@ public class Shop implements Serializable{
 	private String tel;
 	private String Info;
 	private Integer status;
-	private String aname; //店家
+	private String aname; // 店家
+	private String tname; // 类型
 	
 	private String flag;
 	private String mark;
 	private String temp;
 	
+	public Integer getSpid() {
+		return spid;
+	}
+	public void setSpid(Integer spid) {
+		this.spid = spid;
+	}
+	public String getSname() {
+		return sname;
+	}
+	public void setSname(String sname) {
+		this.sname = sname;
+	}
+	public Integer getAid() {
+		return aid;
+	}
+	public void setAid(Integer aid) {
+		this.aid = aid;
+	}
+	public Integer getTid() {
+		return tid;
+	}
+	public void setTid(Integer tid) {
+		this.tid = tid;
+	}
+	public String getProv() {
+		return prov;
+	}
+	public void setProv(String prov) {
+		this.prov = prov;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getArea() {
+		return area;
+	}
+	public void setArea(String area) {
+		this.area = area;
+	}
+	public String getPoints() {
+		return points;
+	}
+	public String getAddress(){
+		return prov+city+area+points;
+	}
+	public void setPoints(String points) {
+		this.points = points;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getInfo() {
+		return Info;
+	}
+	public void setInfo(String info) {
+		Info = info;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	public String getAname() {
+		return aname;
+	}
+	public void setAname(String aname) {
+		this.aname = aname;
+	}
+	public String getTname() {
+		return tname;
+	}
+	public void setTname(String tname) {
+		this.tname = tname;
+	}
+	public String getFlag() {
+		return flag;
+	}
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+	public String getMark() {
+		return mark;
+	}
+	public void setMark(String mark) {
+		this.mark = mark;
+	}
+	public String getTemp() {
+		return temp;
+	}
+	public void setTemp(String temp) {
+		this.temp = temp;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	@Override
 	public String toString() {
 		return "Shop [spid=" + spid + ", sname=" + sname + ", aid=" + aid
 				+ ", tid=" + tid + ", prov=" + prov + ", city=" + city
 				+ ", area=" + area + ", points=" + points + ", tel=" + tel
 				+ ", Info=" + Info + ", status=" + status + ", aname=" + aname
-				+ ", flag=" + flag + ", mark=" + mark + ", temp=" + temp + "]";
+				+ ", tname=" + tname + ", flag=" + flag + ", mark=" + mark
+				+ ", temp=" + temp + "]";
 	}
-
-	public Integer getSpid() {
-		return spid;
-	}
-
-	public void setSpid(Integer spid) {
-		this.spid = spid;
-	}
-
-	public String getSname() {
-		return sname;
-	}
-
-	public void setSname(String sname) {
-		this.sname = sname;
-	}
-
-	public Integer getAid() {
-		return aid;
-	}
-
-	public void setAid(Integer aid) {
-		this.aid = aid;
-	}
-
-	public Integer getTid() {
-		return tid;
-	}
-
-	public void setTid(Integer tid) {
-		this.tid = tid;
-	}
-
-	public String getProv() {
-		return prov;
-	}
-
-	public void setProv(String prov) {
-		this.prov = prov;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getArea() {
-		return area;
-	}
-
-	public void setArea(String area) {
-		this.area = area;
-	}
-
-	public String getPoints() {
-		return points;
-	}
-
-	public void setPoints(String points) {
-		this.points = points;
-	}
-
-	public String getTel() {
-		return tel;
-	}
-
-	public void setTel(String tel) {
-		this.tel = tel;
-	}
-
-	public String getInfo() {
-		return Info;
-	}
-
-	public void setInfo(String info) {
-		Info = info;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public String getAname() {
-		return aname;
-	}
-
-	public void setAname(String aname) {
-		this.aname = aname;
-	}
-
-	public String getFlag() {
-		return flag;
-	}
-
-	public void setFlag(String flag) {
-		this.flag = flag;
-	}
-
-	public String getMark() {
-		return mark;
-	}
-
-	public void setMark(String mark) {
-		this.mark = mark;
-	}
-
-	public String getTemp() {
-		return temp;
-	}
-
-	public void setTemp(String temp) {
-		this.temp = temp;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -171,9 +154,9 @@ public class Shop implements Serializable{
 		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
 		result = prime * result + ((temp == null) ? 0 : temp.hashCode());
 		result = prime * result + ((tid == null) ? 0 : tid.hashCode());
+		result = prime * result + ((tname == null) ? 0 : tname.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -258,13 +241,17 @@ public class Shop implements Serializable{
 				return false;
 		} else if (!tid.equals(other.tid))
 			return false;
+		if (tname == null) {
+			if (other.tname != null)
+				return false;
+		} else if (!tname.equals(other.tname))
+			return false;
 		return true;
 	}
-
 	public Shop(Integer spid, String sname, Integer aid, Integer tid,
 			String prov, String city, String area, String points, String tel,
-			String info, Integer status, String aname, String flag,
-			String mark, String temp) {
+			String info, Integer status, String aname, String tname,
+			String flag, String mark, String temp) {
 		super();
 		this.spid = spid;
 		this.sname = sname;
@@ -278,14 +265,16 @@ public class Shop implements Serializable{
 		Info = info;
 		this.status = status;
 		this.aname = aname;
+		this.tname = tname;
 		this.flag = flag;
 		this.mark = mark;
 		this.temp = temp;
 	}
-
 	public Shop() {
 		super();
 	}
+	
+	
 	
 	
 	

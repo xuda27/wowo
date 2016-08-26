@@ -59,7 +59,7 @@ public class SendMailServlet extends BasicServlet {
 	}
 
 	private void startTimer() {
-		Timer timer = new Timer();
+		final Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			
 			@Override

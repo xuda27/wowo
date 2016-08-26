@@ -27,4 +27,14 @@ public class GoodsTypeBizImpl implements IGoodsTypeBiz {
 		return goodsTypeDao.find();
 	}
 
+	@Override
+	public Integer add(String tname, String des) {
+		return goodsTypeDao.add(tname, des);
+	}
+
+	@Override
+	public Integer update(Integer tid, String tname, String des) {
+		return goodsTypeDao.update(tid, tname, des);
+	}
+
 }

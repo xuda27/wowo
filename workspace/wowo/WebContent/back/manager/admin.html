@@ -1,4 +1,5 @@
 <table class="admin_dataInfo"></table>
+<script src="../../js/showPic.js"></script>
 <!-- 工具栏 -->
 <div id="admin_search" style="height:28px">
     <a href="javascript:addAdminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-add'"  style="float: left">添加</a>
@@ -6,11 +7,11 @@
     <a href="javascript:deleteAdminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" style="float: left">删除</a>
     <div class="datagrid-btn-separator"></div>
     <label>请选择角色：</label><select name="role" id="admin_select_rid">
-    <option value=''>--请选择--</option>
+    <option value='-1'>全部角色</option>
     </select>&nbsp;
     <label>请输入管理员姓名：</label><input type="text" name="aname" id="admin_select_aname">
     <label>请选择状态：</label><select name="status" id="admin_select_status">
-        <option value="">--请选择--</option>
+        <option value="-1">全部状态</option>
         <option value="0">未审核</option>
         <option value="1">未通过审核</option>
         <option value="2">已审核</option>
@@ -57,23 +58,6 @@
 		margin-left:10px;
 	}
 	
-	#camera_errbox {
-		width: 320px;
-		height: auto;
-		border: 1px solid #333333;
-		padding: 10px;
-		color: #fff;
-		text-align: left;
-		margin: 20px auto;
-		font-size: 14px;
-		float:left;
-	}
-	
-	#camera_errbox b {
-		padding-bottom: 15px;
-		
-	}
-	
 	.admin_right .borderstyle{
 		-webkit-box-shadow:0 0 5px 3px rgba(255,0,0,.6),0 0 5px 6px rgba(0,182,0,.6),0 0 5px 10px rgba(255,255,0,.6);
 		-moz-box-shadow:0 0 5px 3px rgba(255,0,0,.6),0 0 5px 6px rgba(0,182,0,.6),0 0 5px 10px rgba(255,255,0,.6);
@@ -84,15 +68,28 @@
 	
 	#navy_video{
 		float:left;
+		margin:30px 0px 0px 30px;
 	}
 
 	#canvas{
 		float:left;
-		margin-left:20px;
+		margin:30px 0px 0px 30px;
 	} 
+	
+	.preview {
+		width:100px;
+		height:100px;
+		float:left;
+		margin:30px 0px 0px 30px;
+	}
+	
+	.insert-button{
+		margin:30px 0px 0px 30px;
+		float:left;
+	}
 </style>
 
-<!-- 添加操作框 -->
+<!-- 添加操作窗口 -->
 <div id="admin_addAdminInfo" class="easyui-dialog" title="添加管理员信息" data-options="iconCls:'icon-add',resizable:true,modal:true,fit:true,closed:true">
 	<div class="admin_left">
 		<form>
@@ -121,33 +118,27 @@
 				</li>
 				<li>
 					<span>图像：</span>
-					<input type="file" id="admin_photo" name="admin_photo" placeholder="请上传您的头像..." required="true">	
+					<input type="file" id="admin_photo" name="admin_photo" placeholder="请上传您的头像..." onchange="setImagePreviews(this,'preview1')" required="true">	
 				</li>
 				<li>
-					<span>状态：</span>
-					<input type="text" id="admin_status" name="admin_status" placeholder="请填写您的状态..." required="true">	
+					<div id="preview" class="preview"></div>
 				</li>
-				
 			</ul>
 		</form>
-		<br><br>
+		<br>
 		<center>
 			<a href="javascript:add_adminInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
 		</center>
 	</div>  
 	
 	<div class="admin_right">
-			<video id="navy_video" width="320px" height="240px" autoplay class="borderstyle"></video>
-			<canvas id="canvas" width="160px" height="120px" class="borderstyle"></canvas>
-			<div id="camera_errbox">
-				<b>请点击“允许”按钮，授权网页访问您的摄像头！</b>
-				<div>若您并未看到任何授权提示，则表示您的浏览器不支持Media Capture或您的机器没有连接摄像头设备。</div>
-			</div>
-			
-			<input id="snap" type="button" value="拍照"/>
-			<button onclick="convertCanvasToImage()"> 保存 </button>
+			<video id="insert_video" width="320px" height="240px" autoplay class="borderstyle"></video>
+			<canvas id="canvas" width = "160px" height="120px" class="borderstyle"></canvas>
+			<br>
+			<input class="insert-button" id="snap" type="button" value="拍照"/>
+			<button class="insert-button" onclick="convertCanvasToImage()">保存 </button>
 	</div>  
-</div>  
+</div>   
 
 <!-- 修改管理员信息 -->
 <div id="admin_updateAdminInfo" class="easyui-dialog" title="修改管理员信息" data-options="iconCls:'icon-add',resizable:true,modal:true,fit:true,closed:true">
@@ -179,7 +170,7 @@
 				</li>
 				<li>
 					<span>图像：</span>
-					<input type="file" id="update_admin_photo" name="photo">	
+					<input type="file" id="update_admin_photo" name="photo" onchange="setImagePreviews(this,'previews')">	
 				</li>
 				<li>
 					<span>状态：</span>
@@ -253,7 +244,7 @@
             {field: 'mark', title: '管理员描述', width: 100, align: 'center', editor: { type : "text" } },   
             {field:'statusStr', title:'账号状态', width:100, align:'center'}, 
             {field:'_operate', title:'操作', width:150, align:'center', formatter:function(val, row, index) {
-                return "<a href='' class='icon-search1  icon-padding'>详细</a>" + "<a href='' class='icon-search1  icon-padding'>删除</a>&nbsp;&nbsp;&nbsp;"+
+                return  "<a href='javascript:deleteAdminInfo()' class='icon-search1  icon-padding'>删除</a>&nbsp;&nbsp;&nbsp;"+
                 "<a href='javascript:updateAdminInfo("+JSON.stringify(row)+")' class='icon-edit2 icon-padding'>修改</a>";
             }}     
         ]], //数据表格的列是一个对象数组  
@@ -261,12 +252,13 @@
         toolbar: "#admin_search"
     });
 
-    //点击添加管理员信息
+    //打开添加窗口
     function addAdminInfo() {
     	init(this);
         $("#admin_addAdminInfo").dialog("open");
     }
     
+    //添加管理员信息
     function add_adminInfo() {
     	var rid = $("#admin_role").val();
     	var aname = $("#admin_aname").val();

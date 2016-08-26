@@ -57,23 +57,38 @@
     <url-pattern>/userServlet</url-pattern>
   </servlet-mapping>
   <servlet>
-    <description></description>
     <display-name>sendMailServlet</display-name>
-    <servlet-name>sendMailServlet</servlet-name>
+    <servlet-name>SendMailServlet</servlet-name>
     <servlet-class>com.yc.wowo.servlets.SendMailServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>sendMailServlet</servlet-name>
+    <servlet-name>SendMailServlet</servlet-name>
     <url-pattern>/sendMailServlet</url-pattern>
   </servlet-mapping>
   <servlet>
-    <description></description>
-    <display-name>GoodsTypeServlet</display-name>
-    <servlet-name>goodsTypeServlet</servlet-name>
+    <servlet-name>GoodsTypeServlet</servlet-name>
     <servlet-class>com.yc.wowo.servlets.GoodsTypeServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>GoodsTypeServlet</servlet-name>
     <url-pattern>/goodsTypeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ShopServlet</servlet-name>
+    <servlet-class>com.yc.wowo.servlets.ShopServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShopServlet</servlet-name>
+    <url-pattern>/shopServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GoodsServlet</display-name>
+    <servlet-name>GoodsServlet</servlet-name>
+    <servlet-class>com.yc.wowo.servlets.GoodsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GoodsServlet</servlet-name>
+    <url-pattern>/goodsServlet</url-pattern>
   </servlet-mapping>
 </web-app>

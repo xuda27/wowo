@@ -42,11 +42,11 @@ $(function() {
 					});
 				}
 			}else if(node.id=="index_shop3"){
-				if(tab.tabs("exists","管理店铺信息")){
-					tab.tabs("select","管理店铺信息");
+				if(tab.tabs("exists","添加店铺信息")){
+					tab.tabs("select","添加店铺信息");
 				}else{
 					tab.tabs("add",{
-						title:"管理店铺信息",
+						title:"添加店铺信息",
 						closable:true,
 						fit:true,
 						href:"managerShopping.html"
@@ -116,6 +116,17 @@ $(function() {
 						closable:true,
 						fit:true,
 						href:"orders.html"
+					});
+				}
+			}else if(node.id == "index_goods1") {
+				if (tab.tabs("exists","添加商品信息")) {
+					tab.tabs("select","添加商品信息");
+				} else {
+					tab.tabs("add",{
+						title:"添加商品信息",
+						closable:true,
+						fit:true,
+						href:"addGoods.html"
 					});
 				}
 			}

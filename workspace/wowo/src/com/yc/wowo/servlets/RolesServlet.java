@@ -84,6 +84,7 @@ public class RolesServlet extends BasicServlet {
 			HttpServletResponse response) {
 		String rname = request.getParameter("rname");
 		String mark = request.getParameter("mark");
+		String status = request.getParameter("status");
 		
 		IRolesBiz roleBiz = new RolesBizImpl();
 		int result  = roleBiz.add(rname, mark);

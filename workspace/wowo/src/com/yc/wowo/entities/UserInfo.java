@@ -1,6 +1,5 @@
 package com.yc.wowo.entities;
 
-import java.awt.Image;
 import java.io.Serializable;
 
 public class UserInfo implements Serializable{
@@ -10,6 +9,7 @@ public class UserInfo implements Serializable{
 	private String relname;
 	private String pwd;
 	private String tel;
+	private String email;
 	private String photo;
 	
 	private String prov;
@@ -18,13 +18,6 @@ public class UserInfo implements Serializable{
 	
 	private Integer grade;
 	private Integer status;
-	@Override
-	public String toString() {
-		return "UserInfo [usid=" + usid + ", uname=" + uname + ", relname="
-				+ relname + ", pwd=" + pwd + ", tel=" + tel + ", photo="
-				+ photo + ", prov=" + prov + ", city=" + city + ", area="
-				+ area + ", grade=" + grade + ", status=" + status + "]";
-	}
 	public Integer getUsid() {
 		return usid;
 	}
@@ -55,6 +48,12 @@ public class UserInfo implements Serializable{
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public String getPhoto() {
 		return photo;
 	}
@@ -79,9 +78,6 @@ public class UserInfo implements Serializable{
 	public void setArea(String area) {
 		this.area = area;
 	}
-	public String getAddress(){
-		return prov+" "+city+" "+area;
-	}
 	public Integer getGrade() {
 		return grade;
 	}
@@ -94,15 +90,13 @@ public class UserInfo implements Serializable{
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	
-	public String getStatusStr() {
-		if(status == 1){
-			return "正常";
-		}else if(status == 0){
-			return "已禁用";
-		}else{
-			return "错误";
-		}
+	@Override
+	public String toString() {
+		return "UserInfo [usid=" + usid + ", uname=" + uname + ", relname="
+				+ relname + ", pwd=" + pwd + ", tel=" + tel + ", email="
+				+ email + ", photo=" + photo + ", prov=" + prov + ", city="
+				+ city + ", area=" + area + ", grade=" + grade + ", status="
+				+ status + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -110,6 +104,7 @@ public class UserInfo implements Serializable{
 		int result = 1;
 		result = prime * result + ((area == null) ? 0 : area.hashCode());
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((grade == null) ? 0 : grade.hashCode());
 		result = prime * result + ((photo == null) ? 0 : photo.hashCode());
 		result = prime * result + ((prov == null) ? 0 : prov.hashCode());
@@ -139,6 +134,11 @@ public class UserInfo implements Serializable{
 			if (other.city != null)
 				return false;
 		} else if (!city.equals(other.city))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
 			return false;
 		if (grade == null) {
 			if (other.grade != null)
@@ -188,14 +188,15 @@ public class UserInfo implements Serializable{
 		return true;
 	}
 	public UserInfo(Integer usid, String uname, String relname, String pwd,
-			String tel, String photo, String prov, String city, String area,
-			Integer grade, Integer status) {
+			String tel, String email, String photo, String prov, String city,
+			String area, Integer grade, Integer status) {
 		super();
 		this.usid = usid;
 		this.uname = uname;
 		this.relname = relname;
 		this.pwd = pwd;
 		this.tel = tel;
+		this.email = email;
 		this.photo = photo;
 		this.prov = prov;
 		this.city = city;
@@ -206,6 +207,21 @@ public class UserInfo implements Serializable{
 	public UserInfo() {
 		super();
 	}
+		
+	public String getAddress(){
+		return prov+" "+city+" "+area;
+	}
+
+	public String getStatusStr() {
+		if(status == 1){
+			return "正常";
+		}else if(status == 0){
+			return "已禁用";
+		}else{
+			return "错误";
+		}
+	}
+	
 	
 	
 }
