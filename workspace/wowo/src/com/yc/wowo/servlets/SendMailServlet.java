@@ -67,7 +67,7 @@ public class SendMailServlet extends BasicServlet {
 				session.removeAttribute("sessionCode");
 				timer.cancel();
 			}
-		}, 100000);
+		}, 60000);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

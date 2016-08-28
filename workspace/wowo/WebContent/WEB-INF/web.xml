@@ -91,4 +91,14 @@
     <servlet-name>GoodsServlet</servlet-name>
     <url-pattern>/goodsServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>wowoServlet</display-name>
+    <servlet-name>wowoServlet</servlet-name>
+    <servlet-class>com.yc.wowo.servlets.WowoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>wowoServlet</servlet-name>
+    <url-pattern>/wowoServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

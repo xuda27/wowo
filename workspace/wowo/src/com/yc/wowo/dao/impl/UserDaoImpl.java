@@ -15,8 +15,9 @@ public class UserDaoImpl implements IUserInfo {
 	@Override
 	public Integer add(String email, String uname, String pwd,String tel, String prov,
 			String city, String area) {
-		String sql = "insert into userInfo(usid,uname,pwd,tel,prov,city,area,status) values(seq_userInfo_usid.nextval,?,?,?,?,?,?,1)";
+		String sql = "insert into userInfo(usid,email,uname,pwd,tel,prov,city,area,status) values(seq_userInfo_usid.nextval,?,?,?,?,?,?,?,1)";
 		List<Object> list = new LinkedList<Object>();
+		list.add(email);
 		list.add(uname);
 		list.add(pwd);
 		list.add(tel);
@@ -64,4 +65,23 @@ public class UserDaoImpl implements IUserInfo {
 		return db.find(sql, params, UserInfo.class);
 	}
 
+	@Override
+	public Integer find(String uname, String pwd) {
+		String sql = "select count(*) from userInfo where uname =? and pwd = ?";
+		List<Object> params = new LinkedList<Object>();
+		params.add(uname);
+		params.add(pwd);
+		return db.findByOne(sql, params);
+	}
+
+	@Override
+	public UserInfo select(String uname, String pwd) {
+		String sql = "select * from userInfo where uname =? and pwd = ?";
+		List<Object> params = new LinkedList<Object>();
+		params.add(uname);
+		params.add(pwd);
+		return db.findByOne(sql, params, UserInfo.class);
+	}
+	
+	
 }

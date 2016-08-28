@@ -1,7 +1,9 @@
 package com.yc.wowo.biz;
 
 import java.util.List;
+import java.util.Map;
 
+import com.yc.wowo.entities.AdminInfo;
 import com.yc.wowo.entities.Goods;
 
 public interface IGoodsBiz {
@@ -11,4 +13,6 @@ public interface IGoodsBiz {
 	
 	public Integer add(String gname,int tid, int spid, int price, String des, String pic );
 
+	public List<Goods> find(Map<String, String> params, Integer pageNo,
+			Integer pageSize);
 }

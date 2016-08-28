@@ -87,8 +87,9 @@ function addOption(node, element) {
 function goSubmit() {
 	for(var i=0;i<f.length;i++){
 		if(f[i]==0){
+			alert("注册失败，请核对注册信息");
 			return false;
-			alert("注册失败，请核对注册信息")
+			
 		}
 	}
 	
@@ -137,6 +138,16 @@ function checkInfo() {
     $("#regemail").bind({
         blur: function() {
             var val = $("#regemail").val();
+            
+            $.post("/wowo/userServlet",{op:"testEmail",email:val},function(data){
+            	if($.trim(data) == "1"){
+            		tdInfo = "";
+            	}else{
+            		tdInfo = "该邮箱已经被注册";
+                    f[0]=0;
+            	}
+            })
+            
             var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
             var tdInfo = "";
@@ -184,7 +195,7 @@ function checkInfo() {
                 f[1]=0;
             } else {
                 tdInfo = "";
-                f[0]=0;
+                f[1]=1;
             }
 
             $("#username_msg").text(tdInfo);
@@ -280,13 +291,16 @@ function checkInfo() {
     				$("#regsafecode_msg").css("color", "red");
     				tdInfo = "验证码错误";
     			}else{
-    				f[5]=0;
+    				f[5]=1;
     				$("#regsafecode_msg").css("color", "green");
     				tdInfo = "验证码正确";
     			}
     		});
     		$("#regsafecode_msg").text(tdInfo);
-    	}
+    	},
+    	focus: function() {
+	        $("#regsafecode_msg").text("");
+	    }
     });
 }
 var time = 60;

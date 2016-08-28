@@ -23,34 +23,33 @@
 	<ul>
 		<li>
 			<span>商品名称:</span> 
-			<input type="text" name="gname" id="gname" placeholder="请输入商品名称..." required="required">
+			<input type="text" id="gname" name="gname"  placeholder="请输入商品名称..." required="required">
 		</li>
 		<li>
 			<span>商品类型：</span>
-			<select name="tname" id="tname" required="required">
+			<select  id="tname" name="tname"  required="required">
 			
 			</select>
 		</li>
 		<li>
 			<span>所属店铺:</span> 
-			<select name="sname" id="sname" required="required">
+			<select  id="sname" name="sname"  required="required">
 				
 			</select>
 		</li>
 		<li>
 			<span>商品价格：</span>
-			<input type="number" name="price" id="price" placeholder="请输入商品价格..." required="required">
+			<input id="price"  type="number" name="price" placeholder="请输入商品价格..." required="required">
 		</li>
 		<li>
-			<span>描述</span>
-			<input type="text" name="des" id="des" >
+			<span>描述:</span>
+			<input id="des"  type="text" name="des" >
 		</li>
 		<li>
-			<span>图片</span>
-			<input type="file" name="myimg" id="myimg" onchange="setImagePreviews(this,'proview')">
+			<span>图片:</span>
+			<input type="file" id="myimg" name="myimg"  onchange="setImagePreviews(this,'proview')">
 		</li>
 		<li>
-			<span>商品图片预览</span>
 			<div id="proview" height="150px" width="150px"></div>
 		</li>
 		<a href="javascript:addGoods()" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
@@ -63,7 +62,7 @@
 		$.post("../../goodsServlet",{op:"selectTname"},function(data){
 			var str = "";
 			$.each(data,function(index,item){
-				str+="<option id ='"+item.tid+"' value='"+item.tid+"'>"+item.tname+"</option>";
+				str+="<option value='"+item.tid+"'>"+item.tname+"</option>";
 			});
 			$("#tname").html("").append($(str));
 		},"json");
@@ -71,7 +70,7 @@
 		$.post("../../goodsServlet",{op:"selectSname"},function(data){
 			var str = "";
 			$.each(data,function(index,item){
-				str+="<option id ='"+item.spid+"' value='"+item.spid+"'>"+item.sname+"</option>";
+				str+="<option value='"+item.spid+"'>"+item.sname+"</option>";
 			});
 			$("#sname").html("").append($(str));
 		},"json");
@@ -83,23 +82,32 @@
 		var sname = $("#sname").val();
 		var price= $("#price").val();
 		var des = $("#des").val();
-		var photo = $("#myimg").val();
-		$.post("../../goodsServlet",
-				{op:"addGoods",gname:gname,tname:tname,sname:sname,price:price,des:des,pic:photo},
-				function(data){
-					data = parseInt($.trim(data));
-					if(data > 0){
-						$("#gname").val("");
-						$("#tname").val("");
-						$("#sname").val("");
-						$("#price").val("");
-						$("#des").val("");
-						$("#myimg").val("");
-						$.messager.show({title: '成功', msg: '添加成功', timeout: 2000, showType: 'slide'});
-					}else{
-						$.messager.alert({title: '失败', msg: '添加失败', timeout: 2000, showType: 'slide'});
-					}
-		});
+		
+		$.ajaxFileUpload({ // 上传图片
+			url:"../../goodsServlet?op=addGoods",
+			secureuri:false,
+			fileElementId:"myimg",
+			dataType:"json",
+    	    data:{gname:gname,tname:tname,sname:sname,price:price,des:des},
+    	    success:function(data, status){
+    	    	data = parseInt($.trim(data));
+    	    	if(data > 0){
+    	    		$.messager.show({title:"成功提示",msg:"商品信息添加成功",timeout:2000,showType:"slide"});
+    	    		$("#gname").val("");
+					$("#tname").val("");
+					$("#sname").val("");
+					$("#price").val("");
+					$("#des").val("");
+    	    		
+    	    		$("#proview").css("display","none");
+    	    	}
+    	    },
+    	    error:function(data,status,e) {
+    	    	$.messager.alert("失败提示", "商品信息修改失败", "error");
+    	    }
+    	    
+    	});
+		
 	}
 </script>
 

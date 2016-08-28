@@ -37,4 +37,20 @@ public interface IUserBiz {
 	public List<UserInfo> find(Integer pageNo, Integer pageSize);
 	
 	public List<UserInfo> find(Map<String,String> map, Integer pageNo, Integer pageSize);
+	
+	/**
+	 * 登录验证
+	 * @param uname
+	 * @param pwd
+	 * @return
+	 */
+	public Integer find(String uname, String pwd);
+	
+	/**
+	 * 存session
+	 * @param uname
+	 * @param pwd
+	 * @return
+	 */
+	public UserInfo select(String uname , String pwd);
 }

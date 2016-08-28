@@ -82,7 +82,7 @@
                     </ul>
                 </li>
                 <li class="headTopLogin">
-                	<span class="Gray7">
+                	<span id="loginReg" class="Gray7">
                         您好！请 [<a class="yellowd1" rel="nofollow" gae="click_toplogin" href="login.html">登录</a>]
                         <b class="borderdc">|</b>
                         [<a class="yellowd1" rel="nofollow" gae="click_topregister" href="reg.html">注册</a>]
@@ -231,7 +231,7 @@
                                 <tr>
                                     <td width="160" align="right">登录名：</td>
                                     <td>
-                                        <input id="uname" class="int-type w-fir grey" type="text" name="email" value="手机号/邮箱/用户名" tips="手机号/邮箱/用户名" rule="">
+                                        <input id="uname" class="int-type w-fir grey" type="text" name="email" placeholder="手机号/邮箱/用户名" tips="手机号/邮箱/用户名" rule="">
                                     </td>
                                 </tr>
                                 <tr>
@@ -244,14 +244,14 @@
                                     <td width="160" align="right">验证码：</td>
                                     <td>
                                         <input id="logsafecode" class="int-type w-sec" type="text" name="safecode_id" tips="验证码" maxlength="4">
-                                        <img id="safecodeloginimg" class="pic" width="100" height="30" src="images/safecodelogin.jpg">
-                                        <a id="safecodeloginlink" class="tips" href="#">看不清？换一张</a>
+                                        <img id="safecodeloginimg" class="pic" width="100" height="30" src="jsp/valiCodeImg.jsp">
+                                        <a id="safecodeloginlink" class="tips" href="javascript:safecodeloginimg()">看不清？换一张</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td> </td>
                                     <td>
-                                        <a id="userLogin" class="ubg bigtn redbig" gae="click_login_normal_login" href="#">登录</a>
+                                        <a id="userLogin" class="ubg bigtn redbig" gae="click_login_normal_login" href="javascript:userLogin()">登录</a>
                                         <a class="tips" href="#" gae="click_user-login/password">忘记密码？</a>
                                     </td>
                                 </tr>
@@ -411,7 +411,8 @@
 				<a class="cCode" href="#">close</a>
 			</div>
 		</div>
-        <script src="jquery-1.12.4.js"></script>
+        <script src="js/jquery-1.12.4.js"></script>
+        <script src="js/md5.js"></script>
         <script type="text/javascript">
 			$(function(){
 				checkInfo();
@@ -425,17 +426,18 @@
 				$("<label></label>").appendTo($("#pwd").parent());
 				$("#pwd").next().css("color","red");
 				$("#pwd").next().css("font-size","12px");
-				
+				var uname = "";
+				var pwd = "";
 				$("#uname").bind({
 					blur:function(){
-						var val=$("#uname").val();
-						var reg=/^[a-zA-Z\u4e00\u9fa5][a-zA-Z0-9_\u4e00\u9fa5]{2,17}$/;
+						uname = $("#uname").val();
+						var reg=/^[a-zA-Z\u4e00-\u9fa5][a-zA-Z0-9_\u4e00-\u9fa5]{2,17}$/;
 						
 						var tdInfo="";
 				
-						if(val==""){
+						if(uname==""){
 							tdInfo="*请输入用户名";
-						}else if(!reg.test(val)){
+						}else if(!reg.test(uname)){
 							tdInfo="*请输入正确的用户名";	
 						}else{
 							tdInfo="";	
@@ -450,15 +452,12 @@
 				
 				$("#pwd").bind({
 					blur:function(){
-						var val=$("#pwd").val();
-						var reg=/^\w{6,16}$/;
+						pwd = hex_md5($("#pwd").val());
 						
 						var tdInfo="";
 				
-						if(val==""){
+						if(pwd==""){
 							tdInfo="*请输入密码";
-						}else if(!reg.test(val)){
-							tdInfo="*请输入正确的密码";	
 						}else{
 							tdInfo="";	
 						}
@@ -468,8 +467,28 @@
 					focus:function(){
 						$("#pwd").next().text("");
 					}
-				})
+				});
 			}
+			
+			function userLogin() {
+				var pwd = hex_md5($("#pwd").val());
+				var uname = $("#uname").val();
+				var logsafecode = $("#logsafecode").val();
+				$.post("userServlet",{op:"userLogin",pwd:pwd,uname:uname,logsafecode:logsafecode},function(data){
+					if(parseInt($.trim(data)) > 0){
+						alert("登录成功。")
+						location.href="index.html";
+					}else{
+						alert("用户密码验证码有误");
+					}
+				});
+			}
+			
+			function safecodeloginimg(){
+				$("#safecodeloginimg").attr("src","jsp/valiCodeImg.jsp?d="+new Date());
+			}
+			
+
 		</script>
 	</body>
 </html>

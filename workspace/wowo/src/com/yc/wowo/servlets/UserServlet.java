@@ -1,6 +1,7 @@
 package com.yc.wowo.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +40,63 @@ public class UserServlet extends BasicServlet {
 			testCode(request,response);
 		}else if("searchUser".equals(op)){
 			searchUser(request,response);
+		}else if("testEmail".equals(op)){
+			testEmail(request,response);
+		}else if("userLogin".equals(op)){ // 前台登录 
+			userLogin(request,response);
 		}
 		
 		
 		
 	}
 	
+	
+	/**
+	 * 前台登录 将登录的用户 存在session中
+	 * @param request
+	 * @param response
+	 */
+	private void userLogin(HttpServletRequest request,
+			HttpServletResponse response) {
+		String code = request.getParameter("logsafecode");
+		String scode = "";
+		HttpSession session = request.getSession();
+		if(session != null ){
+			scode = (String) session.getAttribute("rands");
+		}
+		if(code.equals("")|| scode == null || scode.equals("") || !code.trim().equals(scode.trim())  ){
+			this.out(response, 0);
+			return;
+		}
+		
+		String uname = request.getParameter("uname");
+		String pwd = request.getParameter("pwd");
+		IUserBiz ub =  new UserBizImpl();
+		int rs = ub.find(uname, pwd);
+		
+		UserInfo user = new UserInfo();
+		if(rs > 0){
+			user = ub.select(uname, pwd);
+		}
+		session.setAttribute("user", user);
+		this.out(response, rs);
+		
+	}
+
+	private void testEmail(HttpServletRequest request,
+			HttpServletResponse response) {
+		String email = request.getParameter("email");
+		email = email.trim();
+		List<UserInfo> list = (List<UserInfo>) request.getServletContext().getAttribute(AttributeData.ALLUSER);
+		for(UserInfo u :list){
+			if(u.getEmail().equals(email)){
+				this.out(response, 1);
+				return;
+			}
+		}
+		
+		this.out(response, 0);
+	}
 
 	/**
 	 * 模糊条件查询
@@ -147,7 +199,7 @@ public class UserServlet extends BasicServlet {
 		String code = request.getParameter("code");
 		 HttpSession session = request.getSession();
 		 String scode =  (String) session.getAttribute("sessionCode");
-		 if(code.equals(scode)){ // 正确
+		 if(code.trim().equals(scode.trim())){ // 正确
 			 this.out(response, 0);
 			 return	;
 		 }

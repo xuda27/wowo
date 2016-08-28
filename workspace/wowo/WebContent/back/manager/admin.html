@@ -172,9 +172,9 @@
 					<span>图像：</span>
 					<input type="file" id="update_admin_photo" name="photo" onchange="setImagePreviews(this,'previews')">	
 				</li>
+				
 				<li>
 					<span>状态：</span>
-					<input type="text"  placeholder="请填写您的状态..." >
 					<select id="update_admin_status" name="admin_status" required="true">
 						<option value=-1>请填写您的状态...</option>
 						<option value=0>未审核</option>
@@ -194,6 +194,7 @@
 	
 	<div class="admin_right">
 			<img id="update_adminInfo_photo" src="" width="200px" height="200px">
+			<div id="previews" width="200px" height="200px"></div>
 	</div>  
 </div> 
 
@@ -272,12 +273,11 @@
     	$.post("../../adminInfoServlet",{op:"addAdminInfo",rid:rid, aname:aname, password:password,email:email,tel:tel,photo:pic},function(data){
     		data = parseInt($.trim(data));
     		if(data > 0){
-                $.messager.show({title: '成功提示', msg: '角色添加成功', timeout: 2000, showType: 'slide'});
+                $.messager.show({title: '成功提示', msg: '管理员信息添加成功', timeout: 2000, showType: 'slide'});
                 $("#admin_aname").val("");
                 $("#admin_password").val("");
                 $("#admin_tel").val("");
                 $("#admin_email").val("");
-                
                 $("#admin_addAdminInfo").dialog("close");//关闭弹出框
                 $(".admin_dataInfo").datagrid("reload");//刷新数据
     		}else{
@@ -314,7 +314,7 @@
     	var email = $("#update_admin_email").val();
     	var tel = $("#update_admin_tel").val();
     	
-    	$.ajaxFileUpload({
+    	$.ajaxFileUpload({ // 上传图片
     	    url:"../../adminInfoServlet?op=updateAdminInfo",
     	    secureuri:false,
     	    fileElementId:"update_admin_photo",
@@ -323,13 +323,14 @@
     	    success:function(data, status){
     	    	data = parseInt($.trim(data));
     	    	if(data > 0){
-    	    		$.messager.show({title:"成功提示",msg:"管理员信息添加成功",timeout:2000,showType:"slide"});
+    	    		$.messager.show({title:"成功提示",msg:"管理员信息修改成功",timeout:2000,showType:"slide"});
     	    		$("#update_admin_aid").val("");
     	    		$("#update_admin.aname").val("");
     	    		$("#update_admin_password").val("");
     	    		$("#update_admin_tel").val("");
     	    		$("#update_admin_email").val("");
     	    		
+    	    		$("#previews").css("display","none");
     	    		$("#admin_updateAdminInfo").dialog("close");
     	    		$(".admin_dataInfo").datagrid("reload");
     	    	}

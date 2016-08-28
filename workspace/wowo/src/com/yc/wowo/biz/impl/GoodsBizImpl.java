@@ -1,6 +1,7 @@
 package com.yc.wowo.biz.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yc.wowo.biz.IGoodsBiz;
 import com.yc.wowo.dao.IGoods;
@@ -23,6 +24,12 @@ public class GoodsBizImpl implements IGoodsBiz {
 	public Integer add(String gname, int tid, int spid, int price, String des,
 			String pic) {
 		return goodsDao.add(gname, tid, spid, price, des, pic);
+	}
+
+	@Override
+	public List<Goods> find(Map<String, String> params, Integer pageNo,
+			Integer pageSize) {
+		return goodsDao.find(params, pageNo, pageSize);
 	}
 	
 }

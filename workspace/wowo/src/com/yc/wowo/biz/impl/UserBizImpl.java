@@ -40,4 +40,22 @@ public class UserBizImpl implements IUserBiz {
 		return userDao.find(map, pageNo, pageSize);
 	}
 
+	@Override
+	public Integer find(String uname, String pwd) {
+		if(!uname.equals("") && uname != null && !pwd.equals("") && pwd != null){
+			return userDao.find(uname, pwd);
+		}else{
+			return 0;
+		}
+	}
+
+	@Override
+	public UserInfo select(String uname, String pwd) {
+		if(!uname.equals("") && uname != null && !pwd.equals("") && pwd != null){
+			return userDao.select(uname, pwd);
+		}else{
+			return null;
+		}
+	}
+
 }
