@@ -66,4 +66,12 @@ public class GoodsDaoImpl implements IGoods {
 		return db.find(sql, params, Goods.class);
 	}
 
+	@Override
+	public Goods find(Integer gid) {
+		String sql = "select * from goodss where gid = ?";
+		List<Object> params = new LinkedList<Object>();
+		params.add(gid);
+		return db.findByOne(sql, params, Goods.class);
+	}
+
 }

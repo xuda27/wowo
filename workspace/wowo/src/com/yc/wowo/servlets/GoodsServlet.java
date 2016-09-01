@@ -47,12 +47,27 @@ public class GoodsServlet extends BasicServlet {
 			selectGoods(request,response);
 		}else if("findGoodsIndex".equals(op)){
 			findGoodsIndex(request,response);
+		}else if("findGoodsByGid".equals(op)){
+			findGoodsByGid(request,response);
 		}
 	
 		
 	}
 	
 
+	/**
+	 * 查询指定gid的商品
+	 * @param request
+	 * @param response
+	 */
+	private void findGoodsByGid(HttpServletRequest request,
+			HttpServletResponse response) {
+		String gid1= request.getParameter("gid");
+		Integer gid = Integer.parseInt(gid1.trim());
+		IGoodsBiz gb = new GoodsBizImpl();
+		Goods goods = gb.find(gid);
+		this.out(response, goods);
+	}
 	
 	/**
 	 * 模糊查询

@@ -20,5 +20,7 @@ public interface IGoods {
 	
 	public List<Goods> find(Map<String, String> params, Integer pageNo,
 			Integer pageSize);
+	
+	public Goods find(Integer gid);
 
 }

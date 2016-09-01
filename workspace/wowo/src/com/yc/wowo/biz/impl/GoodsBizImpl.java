@@ -31,5 +31,10 @@ public class GoodsBizImpl implements IGoodsBiz {
 			Integer pageSize) {
 		return goodsDao.find(params, pageNo, pageSize);
 	}
+
+	@Override
+	public Goods find(Integer gid) {
+		return goodsDao.find(gid);
+	}
 	
 }

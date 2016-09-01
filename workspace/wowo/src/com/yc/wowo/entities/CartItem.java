@@ -1,29 +1,79 @@
 package com.yc.wowo.entities;
 
 public class CartItem { // 购物车商品
-	private Long id;
-	private String title;
-	private Integer price;
+	private Integer ciid;
+	private Integer gid;
+	private Integer usid;
 	private Integer num;
-	private String image;
-	public CartItem(Long id, String title, Integer price, Integer num,
-			String image) {
-		super();
-		this.id = id;
-		this.title = title;
-		this.price = price;
+	
+	
+	private String gname;//
+	private Integer price;
+	private String uname;
+	public Integer getCiid() {
+		return ciid;
+	}
+	public void setCiid(Integer ciid) {
+		this.ciid = ciid;
+	}
+	public Integer getGid() {
+		return gid;
+	}
+	public void setGid(Integer gid) {
+		this.gid = gid;
+	}
+	public Integer getUsid() {
+		return usid;
+	}
+	public void setUsid(Integer usid) {
+		this.usid = usid;
+	}
+	public Integer getNum() {
+		return num;
+	}
+	public void setNum(Integer num) {
 		this.num = num;
-		this.image = image;
+	}
+	public String getGname() {
+		return gname;
+	}
+	public void setGname(String gname) {
+		this.gname = gname;
+	}
+	public Integer getPrice() {
+		return price;
+	}
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+	public String getUname() {
+		return uname;
+	}
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+	public CartItem(Integer ciid, Integer gid, Integer usid, Integer num,
+			String gname, Integer price, String uname) {
+		super();
+		this.ciid = ciid;
+		this.gid = gid;
+		this.usid = usid;
+		this.num = num;
+		this.gname = gname;
+		this.price = price;
+		this.uname = uname;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((image == null) ? 0 : image.hashCode());
+		result = prime * result + ((ciid == null) ? 0 : ciid.hashCode());
+		result = prime * result + ((gid == null) ? 0 : gid.hashCode());
+		result = prime * result + ((gname == null) ? 0 : gname.hashCode());
 		result = prime * result + ((num == null) ? 0 : num.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((uname == null) ? 0 : uname.hashCode());
+		result = prime * result + ((usid == null) ? 0 : usid.hashCode());
 		return result;
 	}
 	@Override
@@ -35,15 +85,20 @@ public class CartItem { // 购物车商品
 		if (getClass() != obj.getClass())
 			return false;
 		CartItem other = (CartItem) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (ciid == null) {
+			if (other.ciid != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!ciid.equals(other.ciid))
 			return false;
-		if (image == null) {
-			if (other.image != null)
+		if (gid == null) {
+			if (other.gid != null)
 				return false;
-		} else if (!image.equals(other.image))
+		} else if (!gid.equals(other.gid))
+			return false;
+		if (gname == null) {
+			if (other.gname != null)
+				return false;
+		} else if (!gname.equals(other.gname))
 			return false;
 		if (num == null) {
 			if (other.num != null)
@@ -55,46 +110,32 @@ public class CartItem { // 购物车商品
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
-		if (title == null) {
-			if (other.title != null)
+		if (uname == null) {
+			if (other.uname != null)
 				return false;
-		} else if (!title.equals(other.title))
+		} else if (!uname.equals(other.uname))
+			return false;
+		if (usid == null) {
+			if (other.usid != null)
+				return false;
+		} else if (!usid.equals(other.usid))
 			return false;
 		return true;
 	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public Integer getPrice() {
-		return price;
-	}
-	public void setPrice(Integer price) {
-		this.price = price;
-	}
-	public Integer getNum() {
-		return num;
-	}
-	public void setNum(Integer num) {
-		this.num = num;
-	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
+	@Override
+	public String toString() {
+		return "CartItem [ciid=" + ciid + ", gid=" + gid + ", usid=" + usid
+				+ ", num=" + num + ", gname=" + gname + ", price=" + price
+				+ ", uname=" + uname + "]";
 	}
 	public CartItem() {
 		super();
 	}
+
+	
+	
+	
+	
 	
 	
 }

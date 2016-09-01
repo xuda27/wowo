@@ -3678,7 +3678,7 @@ span#topusername a:hover {
 }
 
 
-#numimg1{
+.numimg1{
 	width:15px;
 	height:15px;
 	position:absolute;
@@ -3688,15 +3688,14 @@ span#topusername a:hover {
 	background-position:0px -381px;
 }
 
-#numimg{
+.numimg{
 	width:15px;
 	height:18px;
 	position:absolute;
 	background-image:url(../images/uicon.png);
 	background-position:0px -717px;
 }
-
-#numimg2{
+.numimg2{
 	width:15px;
 	height:15px;
 	position:absolute;

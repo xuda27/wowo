@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <title>物品详情|窝窝团</title>
         <link rel="stylesheet" href="css/basic.css" />
+        <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+        <script type="text/javascript" src="js/details.js"></script>
     </head>
     
     <body id="center">
@@ -82,7 +84,7 @@
                     </ul>
                 </li>
                 <li class="headTopLogin">
-                	<span class="Gray7">
+                	<span class="Gray7" id="loginReg">
                         您好！请 [<a class="yellowd1" rel="nofollow" gae="click_toplogin" href="login.html">登录</a>]
                         <b class="borderdc">|</b>
                         [<a class="yellowd1" rel="nofollow" gae="click_topregister" href="reg.html">注册</a>]
@@ -221,54 +223,46 @@
 		<div class="con_box clearfix">
 			<div class="con_left clearfix">
 				<div class="details-ui clearfix">
-					<h2 class="details-h2">【石鼓区】熊猫餐谋环球海鲜自助餐厅</h2>
-					<p class="details-p">仅98元，享价值196元周一至周五双人自助午餐1份！提供免费WIFI，提供免费停车位！必含女士1名，提供免费专车接送，尽享环球美食！</p>
+					<h2 class="details-h2" id="item-gname"></h2>
+					<p class="details-p" id="item-des"></p>
 					<ul class="details-lft">
-						<li class="details-rigbg"></li>
-						<li class="details-buy">
-							<strong class="wowoprice">¥98</strong>
-							<a class="xqbuy-a" data="buySubmit" rel="nofollow" href="#">抢购</a>
-						</li>
-                        <li class="shopprice">
-                            <span>价值</span>
-                            <span>折扣</span>
-                            <span>节省</span>
-                            <span class="ari">¥196</span>
-                            <span class="ari">5折</span>
-                            <span class="ari">¥98</span>
-                        </li>
-                        <li class="shopmsg" style="padding-bottom: 2px; padding-top: 7px;" data="groupok">
-                            <span>
-                                <strong class="ari" data="salenum">1377</strong>
-                                人已购买
-                            </span>
-                        	<span>已成团，可继续购买</span>
-                        </li>
-						<li class="add_code" ajaxurl="">
-							<div class="code_bg clearfix">
-								<img class="img_o" src="images/takeOrder.jpg">
-								<div class="code_font clearfix">
-                                	<p>手机窝窝</p>
-                                	<p>扫码下单</p>
-                                </div>
-							</div>
-						</li>
-						<li class="shopensure">
-                            <a class="zhichi" title="支持未消费退款" target="_blank" href="#">支持退款</a>
-                            <a class="baiwan" title="百万消费保证金" target="_blank" href="#" style="margin-right: -1px;">百万消费保证金</a>
-                    	</li>
-                    </ul>
+					  <li class="details-rigbg"></li>
+					  <li class="details-buy">
+					    <strong class="wowoprice" id="item-price"></strong>
+					    <a class="xqbuy-a" data="buySubmit" rel="nofollow" href="">抢购</a></li>
+					  <li class="shopprice">
+					    <span>价值</span>
+					    <span>折扣</span>
+					    <span>节省</span>
+					    <span class="ari" id="ari-wowoprice">¥196</span>
+					    <span class="ari">5折</span>
+					    <span class="ari" id="ari-price"></span></li>
+					  <li class="shopmsg" style="padding-bottom: 2px; padding-top: 7px;" data="groupok">
+					    <span>
+					      <strong class="ari" data="salenum">1377</strong>人已购买</span>
+					    <span>已成团，可继续购买</span></li>
+					  <li class="add_code" ajaxurl="">
+					    <div class="code_bg clearfix">
+					      <img class="img_o" src="images/takeOrder.jpg">
+					      <div class="code_font clearfix">
+					        <p>手机窝窝</p>
+					        <p>扫码下单</p>
+					      </div>
+					    </div>
+					  </li>
+					  <li class="shopensure">
+					    <a class="zhichi" title="支持未消费退款" target="_blank" href="#">支持退款</a>
+					    <a class="baiwan" title="百万消费保证金" target="_blank" href="#" style="margin-right: -1px;">百万消费保证金</a></li>
+					</ul>
 					<div class="details-rit">
-						<ul class="xqtag clearfix">
-							<li class="myy">免预约</li>
-						</ul>
-						<div id="imgBox">
-                            <ul>
-                                <li>
-                                	<img width="456" height="304" border="0" src="images/details1.jpg">
-                                </li>
-                            </ul>
-                        </div>
+					  <ul class="xqtag clearfix">
+					    <li class="myy">免预约</li></ul>
+					  <div id="imgBox">
+					    <ul>
+					      <li>
+					        <img id="imgPic" width="456" height="304" border="0" src=""></li>
+					    </ul>
+					  </div>
 					</div>
 				</div>
 				<div id="details-left" class="details-msg details-abeam clearfix" style="padding: 0px;">
@@ -355,11 +349,11 @@
                             </div>
 						</div>
                         <div class="btmbuy" style="padding: 35px;">
-							<span class="py">¥98</span>
+							<span class="py" id="pymoney">¥98</span>
 							<ul class="cr">
 								<li>
                                     价值<br>
-                                    <del class="num">¥196</del>
+                                    <del class="num" id="originalPrice">¥196</del>
 								</li>
                                 <li>
                                     折扣<br>
@@ -367,10 +361,10 @@
                                 </li>
                                 <li>
                                     节省<br>
-                                    <span class="num">¥98</span>
+                                    <span class="num"  id="wowoMoney">¥98</span>
                                 </li>
 							</ul>
-							<a class="butbtn" data="buySubmit" rel="nofollow" href="shopcart.html">确认购买</a>
+							<a class="butbtn" data="buySubmit" rel="nofollow" href="javascript:purchase()">确认购买</a>
 							<div class="code_bg clearfix">
 								<img class="img_o" src="images/takeOrder.jpg">
 								<div class="code_font clearfix">

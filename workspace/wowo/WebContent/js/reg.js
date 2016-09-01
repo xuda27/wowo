@@ -85,6 +85,7 @@ function addOption(node, element) {
 
 
 function goSubmit() {
+	
 	for(var i=0;i<f.length;i++){
 		if(f[i]==0){
 			alert("注册失败，请核对注册信息");
@@ -95,7 +96,7 @@ function goSubmit() {
 	
 	var email = $("#regemail").val();
 	var username = $("#username").val();
-	var password = $("#password").val();
+	var password =hex_md5($("#password").val());
 	var tel = $("#tel").val();
 	var province= $("#province").find("option:selected").text();
 	var city = $("#city").find("option:selected").text();
@@ -138,19 +139,20 @@ function checkInfo() {
     $("#regemail").bind({
         blur: function() {
             var val = $("#regemail").val();
-            
+            var tdInfo = "";
             $.post("/wowo/userServlet",{op:"testEmail",email:val},function(data){
             	if($.trim(data) == "1"){
-            		tdInfo = "";
-            	}else{
             		tdInfo = "该邮箱已经被注册";
                     f[0]=0;
+            	}else{
+            		tdInfo = "";
+            		f[0]=1;
             	}
             })
             
             var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
-            var tdInfo = "";
+            
             
             if (val == "") {
                 tdInfo = "请输入邮箱";
@@ -280,28 +282,7 @@ function checkInfo() {
         }
     });
     
-    $("#regsafecode").bind({
-    	blur:function() {
-    		var tdInfo = "";
-    		var val = $("#regsafecode").val();
-    		$.post("/wowo/userServlet",{op:"testCode", code:val},function(data){
-    			data = parseInt(data);
-    			if(data == 1){
-    				f[5]=0;
-    				$("#regsafecode_msg").css("color", "red");
-    				tdInfo = "验证码错误";
-    			}else{
-    				f[5]=1;
-    				$("#regsafecode_msg").css("color", "green");
-    				tdInfo = "验证码正确";
-    			}
-    		});
-    		$("#regsafecode_msg").text(tdInfo);
-    	},
-    	focus: function() {
-	        $("#regsafecode_msg").text("");
-	    }
-    });
+    
 }
 var time = 60;
 
@@ -319,6 +300,29 @@ function sendCode(){
 			$("#mycodebtn").attr("disabled", false);
 		}
 	});
+	
+	$("#regsafecode").bind({
+    	blur:function() {
+    		var tdInfo = "";
+    		var val = $("#regsafecode").val();
+    		$.post("/wowo/userServlet",{op:"testCode", code:val},function(data){
+    			data = parseInt(data);
+    			if(data !=0){
+    				f[5]=0;
+    				$("#regsafecode_msg").css("color", "red");
+    				tdInfo = "验证码错误";
+    			}else{
+    				f[5]=1;
+    				$("#regsafecode_msg").css("color", "green");
+    				tdInfo = "验证码正确";
+    			}
+    		});
+    		$("#regsafecode_msg").text(tdInfo);
+    	},
+    	focus: function() {
+	        $("#regsafecode_msg").text("");
+	    }
+    });
 }
 
 function changeNum(){
